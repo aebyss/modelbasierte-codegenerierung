@@ -23,7 +23,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
   public String generateCode(final CodegenInterface it, final org.eclipse.uml2.uml.Class umlClass, final String context) {
     return null;
   }
-  
+
   public String generateIncludes(final CodegenInterface it, final org.eclipse.uml2.uml.Class umlClass) {
     String _xblockexpression = null;
     {
@@ -66,7 +66,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
     }
     return _xblockexpression;
   }
-  
+
   public String generatePath(final CodegenInterface it, final NamedElement from, final NamedElement to) {
     final Path fromPath = it.getPath(from, "declaration");
     final Path toPath = it.getPath(to, "declaration");
@@ -84,7 +84,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
     final Path relPath = _elvis;
     return IterableExtensions.join(relPath, "/");
   }
-  
+
   @Override
   public Path getPath(final org.eclipse.uml2.uml.Class umlClass, final String context) {
     LinkedList<String> path = new LinkedList<String>();

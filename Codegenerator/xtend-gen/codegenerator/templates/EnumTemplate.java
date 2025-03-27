@@ -112,7 +112,7 @@ public class EnumTemplate implements Template<Enumeration> {
     }
     return null;
   }
-  
+
   @Override
   public Path getPath(final Enumeration umlEnum, final String context) {
     LinkedList<String> path = new LinkedList<String>();

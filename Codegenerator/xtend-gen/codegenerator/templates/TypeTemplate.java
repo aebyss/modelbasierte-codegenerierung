@@ -2,7 +2,7 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
-import com.google.common.base.Objects;
+import java.util.Objects;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -28,7 +28,7 @@ public class TypeTemplate implements Template<Type> {
       }
     }
     if (!_matched) {
-      if (Objects.equal(umlType, null)) {
+      if (Objects.equals(umlType, null)) {
         _matched=true;
         _switchResult = "void*";
       }

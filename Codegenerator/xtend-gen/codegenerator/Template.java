@@ -1,6 +1,5 @@
 package codegenerator;
 
-import codegenerator.CodegenInterface;
 import java.nio.file.Path;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
@@ -16,7 +15,7 @@ public interface Template<T extends Object> {
    * @return Code in form of a String, may be empty or null.
    */
   String generateCode(final CodegenInterface it, final T object, final String context);
-  
+
   /**
    * Tells whether or not this template generates the contents of a whole
    * file, given some object.
@@ -32,7 +31,7 @@ public interface Template<T extends Object> {
     final Path path = this.getPath(object, context);
     return ((null != path) && (!IterableExtensions.isEmpty(path)));
   }
-  
+
   /**
    * Returns the path of the file that this template generates, if it is a
    * root template, null otherwise.

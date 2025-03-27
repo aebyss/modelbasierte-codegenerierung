@@ -1,8 +1,5 @@
 package codegenerator;
 
-import codegenerator.CodegenInterface;
-import codegenerator.Template;
-import codegenerator.Uml2CInterface;
 import codegenerator.templates.ClassTemplate;
 import codegenerator.templates.EnumLiteralTemplate;
 import codegenerator.templates.EnumTemplate;
@@ -53,24 +50,24 @@ public class Uml2C {
    * until a type is found for which a template is registered.
    */
   private final HashMap<Pair<Class<?>, String>, Template<?>> templates = new HashMap<Pair<Class<?>, String>, Template<?>>();
-  
+
   /**
    * This cache is filled at run-time each time a template is found by
    * searching the the type hierarchy. This way subsequent template lookups
    * are faster.
    */
   private final HashMap<Pair<Class<?>, String>, Template<?>> templatesCache = new HashMap<Pair<Class<?>, String>, Template<?>>();
-  
+
   /**
    * This set contains all context strings that templates are registered for.
    */
   private final HashSet<String> contexts = new HashSet<String>();
-  
+
   /**
    * The CodegenInterface that is passed to all templates.
    */
   private CodegenInterface generatorInterface;
-  
+
   /**
    * Constructor, here all templates should be registered.
    */
@@ -118,11 +115,11 @@ public class Uml2C {
     TypeTemplate _typeTemplate_1 = new TypeTemplate();
     this.<Type>registerTemplate(_typeTemplate_1, null, "type");
   }
-  
+
   public Uml2C() {
     this(Collections.<String, Object>emptyMap());
   }
-  
+
   /**
    * This method looks in its internal registry for a template that matches
    * the given objects type and context. If one template is found, it is used
@@ -161,7 +158,7 @@ public class Uml2C {
     }
     return "";
   }
-  
+
   /**
    * Checks for a template that matches the given objects type and context.
    * If a matching template exists, the call is passed on to it.
@@ -175,7 +172,7 @@ public class Uml2C {
     }
     return null;
   }
-  
+
   /**
    * This method takes a Resource containing an UML model. It searches for
    * root templates given the UML Elements. When a root template is found,
@@ -201,7 +198,7 @@ public class Uml2C {
     }
     return result;
   }
-  
+
   /**
    * Helper function that adds the given template to the template registry inside this class.
    */
@@ -215,7 +212,7 @@ public class Uml2C {
     }
     return _xblockexpression;
   }
-  
+
   /**
    * Recursively searches the type hierarchy of the given class, until a template is found
    * that matches the type and context String.
