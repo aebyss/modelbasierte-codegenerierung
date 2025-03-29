@@ -107,6 +107,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="/home/edo/git/modelbasierte-codegenerierung"/>
 			<item value="/home/edo/workspace-papyrus"/>
 			<item value="/home/edo/Downloads/Codegenerator"/>
 		</list>
