@@ -16,19 +16,36 @@ class ParameterTemplate implements Template<Parameter> {
 		switch context {
 			case "return": {
 				if (umlParameter.direction === ParameterDirectionKind.RETURN_LITERAL) {
-					typeName = generate(umlParameter.type, "name")
-					if (typeName == "") {
+					//habe hier problem mit dem null check koennte nicht die tests starten bei mir
+					if (umlParameter.type !== null) {
+						typeName = generate(umlParameter.type, "name")
+					} else {
 						typeName = "void*"
 					}
 				}
 			}
 			default: {
 				name = generate(umlParameter, "name")
-				typeName = generate(umlParameter.type, "name")
-				if (typeName == "") {
-					typeName = "void*"
-				}	
+				if (umlParameter.type !== null) {
+						typeName = generate(umlParameter.type, "name")
+					} else {
+						typeName = "void*"
+					}
 			}
+		}
+		//pointer (*) for:
+		//complext type
+		//in-out
+		//TODO complex in out
+		if (
+			umlParameter.type !== null &&
+			(
+				umlParameter.type.eClass.name == "Class" ||
+				umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL ||
+				umlParameter.direction == ParameterDirectionKind.OUT_LITERAL
+			)
+		) {
+			typeName = typeName + "*"
 		}
 		
 		// Rückgabe der Werte
