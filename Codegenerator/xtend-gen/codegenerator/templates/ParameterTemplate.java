@@ -5,6 +5,7 @@ import codegenerator.Template;
 import com.google.common.base.Objects;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
@@ -21,9 +22,11 @@ public class ParameterTemplate implements Template<Parameter> {
             ParameterDirectionKind _direction = umlParameter.getDirection();
             boolean _tripleEquals = (_direction == ParameterDirectionKind.RETURN_LITERAL);
             if (_tripleEquals) {
-              typeName = it.generate(umlParameter.getType(), "name");
-              boolean _equals = Objects.equal(typeName, "");
-              if (_equals) {
+              Type _type = umlParameter.getType();
+              boolean _tripleNotEquals = (_type != null);
+              if (_tripleNotEquals) {
+                typeName = it.generate(umlParameter.getType(), "name");
+              } else {
                 typeName = "void*";
               }
             }
@@ -31,9 +34,11 @@ public class ParameterTemplate implements Template<Parameter> {
           default:
             {
               name = it.generate(umlParameter, "name");
-              typeName = it.generate(umlParameter.getType(), "name");
-              boolean _equals_1 = Objects.equal(typeName, "");
-              if (_equals_1) {
+              Type _type_1 = umlParameter.getType();
+              boolean _tripleNotEquals_1 = (_type_1 != null);
+              if (_tripleNotEquals_1) {
+                typeName = it.generate(umlParameter.getType(), "name");
+              } else {
                 typeName = "void*";
               }
             }
@@ -42,16 +47,29 @@ public class ParameterTemplate implements Template<Parameter> {
       } else {
         {
           name = it.generate(umlParameter, "name");
-          typeName = it.generate(umlParameter.getType(), "name");
-          boolean _equals_1 = Objects.equal(typeName, "");
-          if (_equals_1) {
+          Type _type_1 = umlParameter.getType();
+          boolean _tripleNotEquals_1 = (_type_1 != null);
+          if (_tripleNotEquals_1) {
+            typeName = it.generate(umlParameter.getType(), "name");
+          } else {
             typeName = "void*";
           }
         }
       }
+      if (((umlParameter.getType() != null) && 
+        ((Objects.equal(umlParameter.getType().eClass().getName(), "Class") || 
+          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL)) || 
+          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL)))) {
+        typeName = (typeName + "*");
+      }
+      if ((((umlParameter.getType() != null) && Objects.equal(umlParameter.getType().eClass().getName(), "Class")) && 
+        (Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL) || 
+          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL)))) {
+        typeName = (typeName + "*");
+      }
       String _xifexpression = null;
-      boolean _equals_1 = Objects.equal(name, "");
-      if (_equals_1) {
+      boolean _equals = Objects.equal(name, "");
+      if (_equals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(typeName);
         _xifexpression = _builder.toString();
