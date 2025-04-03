@@ -4,6 +4,7 @@ import codegenerator.CodegenInterface
 import codegenerator.Template
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.ParameterDirectionKind
+import org.eclipse.uml2.uml.Class
 
 class ParameterTemplate implements Template<Parameter> {
 
@@ -15,7 +16,6 @@ class ParameterTemplate implements Template<Parameter> {
 		switch context {
 			case "return": {
 				if (umlParameter.direction === ParameterDirectionKind.RETURN_LITERAL) {
-					// habe hier problem mit dem null check koennte nicht die tests starten bei mir
 					if (umlParameter.type !== null) {
 						typeName = generate(umlParameter.type, "name")
 					} else {
@@ -34,17 +34,16 @@ class ParameterTemplate implements Template<Parameter> {
 		}
 		
 		// pointer (*) for: complext type + INOUT / OUT
-		if (umlParameter.type !== null && (
-				umlParameter.type.eClass.name == "Class" ||
+		if (umlParameter.type instanceof Class ||
 			umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL ||
 			umlParameter.direction == ParameterDirectionKind.OUT_LITERAL
-			)) {
+			) {
 			typeName = typeName + "*"
 		}
 
 		// double pointer (**) for: complex type + INOUT / OUT
-		if (umlParameter.type !== null && umlParameter.type.eClass.name == "Class" && (
-				umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL ||
+		if (umlParameter.type instanceof Class && (
+			umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL ||
 			umlParameter.direction == ParameterDirectionKind.OUT_LITERAL
 			)) {
 			typeName = typeName + "*"
