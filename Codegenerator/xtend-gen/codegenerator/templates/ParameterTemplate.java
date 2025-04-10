@@ -56,13 +56,12 @@ public class ParameterTemplate implements Template<Parameter> {
           }
         }
       }
-      if (((umlParameter.getType() != null) && 
-        ((Objects.equal(umlParameter.getType().eClass().getName(), "Class") || 
-          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL)) || 
-          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL)))) {
+      if ((((umlParameter.getType() instanceof org.eclipse.uml2.uml.Class) || 
+        Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL)) || 
+        Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL))) {
         typeName = (typeName + "*");
       }
-      if ((((umlParameter.getType() != null) && Objects.equal(umlParameter.getType().eClass().getName(), "Class")) && 
+      if (((umlParameter.getType() instanceof org.eclipse.uml2.uml.Class) && 
         (Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL) || 
           Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL)))) {
         typeName = (typeName + "*");

@@ -19,7 +19,7 @@ public class PropertyTemplate implements Template<Property> {
       String name = "";
       boolean _equals = Objects.equal(context, "attribute");
       if (_equals) {
-        name = it.generate(umlProperty, "name");
+        name = umlProperty.getName();
         Type _type = umlProperty.getType();
         boolean _tripleNotEquals = (_type != null);
         if (_tripleNotEquals) {
@@ -27,7 +27,7 @@ public class PropertyTemplate implements Template<Property> {
         } else {
           typeName = "void*";
         }
-        if ((((umlProperty.getType() != null) && Objects.equal(umlProperty.getType().eClass().getName(), "Class")) && (!Objects.equal(umlProperty.getAggregation(), AggregationKind.COMPOSITE_LITERAL)))) {
+        if ((((umlProperty.getType() != null) && (umlProperty.getType() instanceof org.eclipse.uml2.uml.Class)) && (!Objects.equal(umlProperty.getAggregation(), AggregationKind.COMPOSITE_LITERAL)))) {
           typeName = (typeName + "*");
         }
       } else {
