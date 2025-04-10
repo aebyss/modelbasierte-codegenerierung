@@ -4,4 +4,4 @@ Zum Einbinden eines neuen Aufgaben-Ordners in Eclipse:
 3. "Import auswählen"
 4. "General" -> "Existing Projects into Workspace" -> Next
 5. hier den Ordner der Aufgabe auswählen unter "Select root directory" (z.B. .../CodegenAufgabe2) + (keine Häkchen bei Options)
-6. auf "Finich" klicken
+6. auf "Finish" klicken
