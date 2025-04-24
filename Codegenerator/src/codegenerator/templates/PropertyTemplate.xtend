@@ -40,13 +40,15 @@ class PropertyTemplate implements Template<Property> {
 		if ((umlProperty.aggregation == AggregationKind.COMPOSITE_LITERAL)){
 			pointer = ""
 		} else {
-			// Wenn Array -> Überprüfen des upper-Bounds
-			if (umlProperty.upper > 1) {
-				upperBound = "[" + umlProperty.upper + "]"
-			} else if (umlProperty.upper == -1){
-				// Ein Upper-Bound von -1 bedeutet, dass die Anzahl unbegrenzt ist.
-				pointer += "*"
-			}
+			// bisher keine Änderung
+		}
+		
+		// Wenn Array -> Überprüfen des upper-Bounds
+		if (umlProperty.upper > 1) {
+			upperBound = "[" + umlProperty.upper + "]"
+		} else if (umlProperty.upper == -1){
+			// Ein Upper-Bound von -1 bedeutet, dass die Anzahl unbegrenzt ist.
+			pointer += "*"
 		}
         
         // Rückgabe der Werte
