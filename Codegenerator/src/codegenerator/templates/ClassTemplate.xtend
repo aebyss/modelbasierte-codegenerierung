@@ -14,7 +14,34 @@ class ClassTemplate implements Template<Class> {
 
 	override String generateCode(CodegenInterface it, Class umlClass, String context) {
 		// TODO: Aufgabe 3
+		
+		val name = generate(umlClass, "name")
+		switch (context) {
+			case "declaration": {
+				return '''
+					#ifndef «name.toUpperCase»_H
+					«this.generateIncludes(it, umlClass)»
+					#define «name.toUpperCase»_H
+
+					«it.generate(umlClass, "typedefinition")»
+
+					«FOR operation : umlClass.ownedOperations»
+					«generate(operation, "declaration")»
+					
+					«ENDFOR»
+					#endif
+				'''.toString
+			}
+			case "implementation": {
+				
+			}
+		}
+		
 	}
+
+
+	////////////////////////////////////////////////////////////////////
+	// ab hier war teils schon gegeben /////////////////////////////////
 
 	def String generateIncludes(CodegenInterface it, Class umlClass) {
 		val types = new HashSet<Type>()
