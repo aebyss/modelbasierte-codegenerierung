@@ -14,35 +14,38 @@ class ClassTemplate implements Template<Class> {
 
 	override String generateCode(CodegenInterface it, Class umlClass, String context) {
 		// TODO: Aufgabe 3
-		
 		val name = generate(umlClass, "name")
 		switch (context) {
 			case "declaration": {
 				return '''
 					#ifndef «name.toUpperCase»_H
-					«this.generateIncludes(it, umlClass)»
 					#define «name.toUpperCase»_H
-
-					«it.generate(umlClass, "typedefinition")»
-
-					«FOR operation : umlClass.ownedOperations»
-					«generate(operation, "declaration")»
 					
+					«this.generateIncludes(it, umlClass)»
+					«it.generate(umlClass, "typedefinition")»
+					
+					«FOR operation : umlClass.ownedOperations»
+						«generate(operation, "declaration")»
+						
 					«ENDFOR»
 					#endif
 				'''.toString
 			}
 			case "implementation": {
-				
+				return '''
+					#include "«name».h"
+					«FOR operation : umlClass.ownedOperations»
+						
+						«generate(operation, "implementation")»
+					«ENDFOR»
+				'''.toString
 			}
 		}
-		
+
 	}
 
-
-	////////////////////////////////////////////////////////////////////
+	// //////////////////////////////////////////////////////////////////
 	// ab hier war teils schon gegeben /////////////////////////////////
-
 	def String generateIncludes(CodegenInterface it, Class umlClass) {
 		val types = new HashSet<Type>()
 
@@ -60,17 +63,22 @@ class ClassTemplate implements Template<Class> {
 			}
 		}
 
+		val includes = new HashSet<String>()
+		for (type : types) {
+			includes += "#include \"" + generatePath(umlClass, type) + "\""
+		}
+
 		'''
-			«FOR type : types AFTER '\n'»
-				#include "«generatePath(umlClass, type)»"
-			«ENDFOR»
+		«FOR include : includes.toList.sort AFTER '\n'»
+		«include»
+		«ENDFOR»
 		'''
 	}
 
 	def generatePath(CodegenInterface it, NamedElement from, NamedElement to) {
 		val fromPath = getPath(from, "declaration")
 		val toPath = getPath(to, "declaration")
-		
+
 		val relPath = fromPath.parent?.relativize(toPath) ?: toPath
 		return relPath.join("/")
 	}
