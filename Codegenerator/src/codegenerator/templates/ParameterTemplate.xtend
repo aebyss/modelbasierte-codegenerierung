@@ -16,7 +16,10 @@ class ParameterTemplate implements Template<Parameter> {
 
 		// Parameter (sowie Type) ist ein NamedElement
 		var name = ""
-		var typeName = "void*"
+		var typeName = if (umlParameter.type !== null)
+			it.generate(umlParameter.type, "name")
+		else
+			"void*"
 		if (umlParameter.type !== null) {
 			typeName = generate(umlParameter.type, "name")
 		}

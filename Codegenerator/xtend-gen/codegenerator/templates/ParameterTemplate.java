@@ -17,14 +17,22 @@ public class ParameterTemplate implements Template<Parameter> {
     String _xblockexpression = null;
     {
       String name = "";
-      String typeName = "void*";
+      String _xifexpression = null;
       Type _type = umlParameter.getType();
       boolean _tripleNotEquals = (_type != null);
       if (_tripleNotEquals) {
+        _xifexpression = it.generate(umlParameter.getType(), "name");
+      } else {
+        _xifexpression = "void*";
+      }
+      String typeName = _xifexpression;
+      Type _type_1 = umlParameter.getType();
+      boolean _tripleNotEquals_1 = (_type_1 != null);
+      if (_tripleNotEquals_1) {
         typeName = it.generate(umlParameter.getType(), "name");
       }
-      Type _type_1 = umlParameter.getType();
-      if ((_type_1 instanceof org.eclipse.uml2.uml.Class)) {
+      Type _type_2 = umlParameter.getType();
+      if ((_type_2 instanceof org.eclipse.uml2.uml.Class)) {
         typeName = (typeName + "*");
       }
       ParameterDirectionKind _direction = umlParameter.getDirection();
@@ -47,20 +55,20 @@ public class ParameterTemplate implements Template<Parameter> {
       } else {
         name = umlParameter.getName();
       }
-      String _xifexpression = null;
+      String _xifexpression_1 = null;
       boolean _equals = Objects.equals(name, "");
       if (_equals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(typeName);
-        _xifexpression = _builder.toString();
+        _xifexpression_1 = _builder.toString();
       } else {
         StringConcatenation _builder_1 = new StringConcatenation();
         _builder_1.append(typeName);
         _builder_1.append(" ");
         _builder_1.append(name);
-        _xifexpression = _builder_1.toString();
+        _xifexpression_1 = _builder_1.toString();
       }
-      _xblockexpression = _xifexpression;
+      _xblockexpression = _xifexpression_1;
     }
     return _xblockexpression;
   }

@@ -75,10 +75,27 @@ public class EnumTemplate implements Template<Enumeration> {
           _builder_1.newLine();
           return _builder_1.toString();
         case "implementation":
+          String _elvis = null;
+          Path _path = it.getPath(umlEnum, "declaration");
+          String _string = null;
+          if (_path!=null) {
+            _string=_path.toString();
+          }
+          String _replace = null;
+          if (_string!=null) {
+            _replace=_string.replace("\\", "/");
+          }
+          if (_replace != null) {
+            _elvis = _replace;
+          } else {
+            String _name = umlEnum.getName();
+            String _plus = (_name + ".h");
+            _elvis = _plus;
+          }
+          final String headerPath = _elvis;
           StringConcatenation _builder_2 = new StringConcatenation();
           _builder_2.append("#include \"");
-          String _replace = it.getPath(umlEnum, "declaration").toString().replace("\\", "/");
-          _builder_2.append(_replace);
+          _builder_2.append(headerPath);
           _builder_2.append("\"");
           _builder_2.newLineIfNotEmpty();
           _builder_2.newLine();
@@ -108,9 +125,12 @@ public class EnumTemplate implements Template<Enumeration> {
           _builder_2.append("};");
           _builder_2.newLine();
           return _builder_2.toString();
+        default:
+          return "// unknown context";
       }
+    } else {
+      return "// unknown context";
     }
-    return null;
   }
 
   @Override

@@ -22,45 +22,52 @@ public class OperationTemplate implements Template<Operation> {
   public String generateCode(final CodegenInterface it, final Operation umlOperation, final String context) {
     String _xblockexpression = null;
     {
-      final String className = umlOperation.getClass_().getQualifiedName().replace("::", "_");
+      final org.eclipse.uml2.uml.Class class_ = umlOperation.getClass_();
+      String _xifexpression = null;
+      if ((class_ != null)) {
+        _xifexpression = it.generate(class_, "name");
+      } else {
+        _xifexpression = "UnknownClass";
+      }
+      final String className = _xifexpression;
       final boolean isStatic = umlOperation.isStatic();
       final Function1<Parameter, Boolean> _function = (Parameter it_1) -> {
         ParameterDirectionKind _direction = it_1.getDirection();
         return Boolean.valueOf(Objects.equals(_direction, ParameterDirectionKind.RETURN_LITERAL));
       };
       final Parameter returnParam = IterableExtensions.<Parameter>findFirst(umlOperation.getOwnedParameters(), _function);
-      String _xifexpression = null;
+      String _xifexpression_1 = null;
       if ((returnParam != null)) {
-        _xifexpression = it.generate(returnParam, "return");
+        _xifexpression_1 = it.generate(returnParam, "return");
       } else {
-        _xifexpression = "void";
+        _xifexpression_1 = "void";
       }
-      final String returnType = _xifexpression;
+      final String returnType = _xifexpression_1;
       final Function1<Parameter, Boolean> _function_1 = (Parameter it_1) -> {
-        return Boolean.valueOf((Objects.equals(it_1.getDirection(), null) || (!Objects.equals(it_1.getDirection(), ParameterDirectionKind.RETURN_LITERAL))));
+        return Boolean.valueOf(((it_1.getDirection() == null) || (!Objects.equals(it_1.getDirection(), ParameterDirectionKind.RETURN_LITERAL))));
       };
       final Iterable<Parameter> nonReturnParams = IterableExtensions.<Parameter>filter(umlOperation.getOwnedParameters(), _function_1);
       final Function1<Parameter, String> _function_2 = (Parameter p) -> {
         return it.generate(p, "parameter");
       };
       final Iterable<String> paramStrings = IterableExtensions.<Parameter, String>map(nonReturnParams, _function_2);
-      List<String> _xifexpression_1 = null;
+      List<String> _xifexpression_2 = null;
       if ((!isStatic)) {
         String _format = String.format("%s* const me", className);
-        _xifexpression_1 = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList(_format));
+        _xifexpression_2 = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList(_format));
       } else {
-        _xifexpression_1 = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList());
+        _xifexpression_2 = Collections.<String>unmodifiableList(CollectionLiterals.<String>newArrayList());
       }
-      final List<String> baseParams = _xifexpression_1;
+      final List<String> baseParams = _xifexpression_2;
       final Iterable<String> allParamsList = Iterables.<String>concat(baseParams, paramStrings);
-      String _xifexpression_2 = null;
+      String _xifexpression_3 = null;
       boolean _isEmpty = IterableExtensions.isEmpty(allParamsList);
       if (_isEmpty) {
-        _xifexpression_2 = "void";
+        _xifexpression_3 = "void";
       } else {
-        _xifexpression_2 = IterableExtensions.join(allParamsList, ", ");
+        _xifexpression_3 = IterableExtensions.join(allParamsList, ", ");
       }
-      final String allParams = _xifexpression_2;
+      final String allParams = _xifexpression_3;
       StringConcatenation _builder = new StringConcatenation();
       _builder.append(returnType);
       _builder.append(" ");

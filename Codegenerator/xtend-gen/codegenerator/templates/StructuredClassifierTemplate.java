@@ -20,15 +20,7 @@ public class StructuredClassifierTemplate implements Template<StructuredClassifi
         case "typedefinition":
           String _xblockexpression = null;
           {
-            String _elvis = null;
-            String _replace = umlClassifier.getQualifiedName().replace("::", "_");
-            if (_replace != null) {
-              _elvis = _replace;
-            } else {
-              String _name = umlClassifier.getName();
-              _elvis = _name;
-            }
-            final String name = _elvis;
+            final String name = it.generate(umlClassifier, "name");
             final EList<Property> properties = umlClassifier.getOwnedAttributes();
             final Function1<Property, String> _function = (Property p) -> {
               String _generate = it.generate(p, "attribute");

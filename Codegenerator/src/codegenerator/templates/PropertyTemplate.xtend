@@ -19,7 +19,7 @@ class PropertyTemplate implements Template<Property> {
 		var name = umlProperty.name
 		var typeName = "void*"
 		if (umlProperty.type !== null) {
-			typeName = generate(umlProperty.type, "name")
+			typeName = it.generate(umlProperty.type, "name")
 		}
 		var pointer = ""
 		var upperBound = ""

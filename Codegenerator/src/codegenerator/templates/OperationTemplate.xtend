@@ -105,7 +105,8 @@ import org.eclipse.uml2.uml.OpaqueBehavior
 class OperationTemplate implements Template<Operation> {
 
 	override generateCode(CodegenInterface it, Operation umlOperation, String context) {
-		val className = umlOperation.class_.qualifiedName.replace("::", "_")
+		val class_ = umlOperation.class_
+		val className = if (class_ !== null) it.generate(class_, "name") else "UnknownClass"
 		val isStatic = umlOperation.isStatic
 
 		// Rückgabetyp
@@ -116,7 +117,7 @@ class OperationTemplate implements Template<Operation> {
 
 		// Nicht-Return-Parameter
 		val nonReturnParams = umlOperation.ownedParameters.filter [
-			direction == null || direction != ParameterDirectionKind::RETURN_LITERAL
+			direction === null || direction != ParameterDirectionKind::RETURN_LITERAL
 		]
 		val paramStrings = nonReturnParams.map[p|it.generate(p, "parameter")]
 

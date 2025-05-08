@@ -13,8 +13,8 @@ class StructuredClassifierTemplate implements Template<StructuredClassifier> {
 			case "typedefinition": {
 				
 				//generate(umlEnum, "name")
-				val name = umlClassifier.qualifiedName.replace("::", "_") ?: umlClassifier.name
-				
+				val name = it.generate(umlClassifier, "name")
+					
 				
 				//alle attribute sammeln	
 				val properties = umlClassifier.ownedAttributes
