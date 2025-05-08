@@ -10,7 +10,8 @@ import org.eclipse.uml2.uml.Enumeration
 class EnumTemplate implements Template<Enumeration> {
 
 	override generateCode(CodegenInterface it, Enumeration umlEnum, String context) {
-		val name = generate(umlEnum, "name")
+		
+		val name = it.generate(umlEnum, "name")
 		switch (context) {
 			case "typedefinition": {
 				return '''
@@ -34,8 +35,9 @@ class EnumTemplate implements Template<Enumeration> {
 				'''
 			}
 			case "implementation": {
+				val headerPath = it.getPath(umlEnum, "declaration")?.toString?.replace("\\", "/") ?: (umlEnum.name + ".h")
 				return '''
-					#include "«umlEnum.name».h"
+					#include "«headerPath»"
 					
 					«name» «name»_Literals[«umlEnum.ownedLiterals.size»] = {
 						«FOR literal : umlEnum.ownedLiterals SEPARATOR ','»
@@ -44,6 +46,7 @@ class EnumTemplate implements Template<Enumeration> {
 					};
 				'''
 			}
+			default: return "// unknown context"
 		}
 	}
 

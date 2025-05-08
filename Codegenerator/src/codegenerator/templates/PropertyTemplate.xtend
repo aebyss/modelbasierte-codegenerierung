@@ -5,33 +5,52 @@ import codegenerator.Template
 import org.eclipse.uml2.uml.AggregationKind
 import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.Class
+import org.eclipse.uml2.uml.Enumeration
 
 class PropertyTemplate implements Template<Property> {
 
-    override generateCode(CodegenInterface it, Property umlProperty, String context) {
-        // Aufgabe 1
-        var typeName = ""
-        var name = ""
-
-        if (context == "attribute") {
-            name = umlProperty.name
-            if (umlProperty.type !== null) {
-                typeName = generate(umlProperty.type, "name")
-            } else {
-                typeName = "void*"
-            }
-            
-            // complex typed property, owned complex typed property
-            if (umlProperty.type !== null && umlProperty.type instanceof Class && !(umlProperty.aggregation == AggregationKind.COMPOSITE_LITERAL)) {
-                typeName = typeName + "*"
-            }        
-            
-        } else {
-            println("PropertyTemplate: unknown context")
-        }
-
+	val String SEPARATOR = "_"
+	
+	override generateCode(CodegenInterface it, Property umlProperty, String context) {
+        // Aufgabe 1, 2
+                
+        
+        // Parameter (sowie Type) ist ein NamedElement
+		var name = umlProperty.name
+		var typeName = "void*"
+		if (umlProperty.type !== null) {
+			typeName = it.generate(umlProperty.type, "name")
+		}
+		var pointer = ""
+		var upperBound = ""
+		
+		// Parameter hat keinen oder einen Type
+		if (umlProperty.type instanceof Class){
+			typeName = typeName
+			pointer = "*"
+		} 
+		else if (umlProperty.type instanceof Enumeration){
+			// bisher keine extra Behandlung
+		}
+		else /* ist PrimitiveType */{
+			// bisher keine extra Behandlung
+		}
+		
+		// Property hat einen AggregationKind (COMPOSITE oder NONE)
+		if ((umlProperty.aggregation == AggregationKind.COMPOSITE_LITERAL)){
+			pointer = ""
+		} else {
+			// Wenn Array -> Überprüfen des upper-Bounds
+			if (umlProperty.upper > 1) {
+				upperBound = "[" + umlProperty.upper + "]"
+			} else if (umlProperty.upper == -1){
+				// Ein Upper-Bound von -1 bedeutet, dass die Anzahl unbegrenzt ist.
+				pointer += "*"
+			}
+		}
+        
         // Rückgabe der Werte
-        '''«typeName» «name»;'''
+        '''«typeName»«pointer» «name»«upperBound»;'''
     }
 
 }

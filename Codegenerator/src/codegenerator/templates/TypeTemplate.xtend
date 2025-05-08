@@ -5,18 +5,24 @@ import codegenerator.Template
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.Enumeration
 
 class TypeTemplate implements Template<Type> {
 
 	override generateCode(CodegenInterface it, Type umlType, String context) {
+		if (umlType === null) {
+			return "void*"
+		}
+
 		switch umlType {
 			PrimitiveType:
-				generate(umlType, "name")
-			Class: '''«generate(umlType, "name")»*'''
-			case null:
-				"void*"
-			default: '''<codegenerator for type "«umlType.eClass.name»" is not yet implemented>'''
+				it.generate(umlType, "name")
+			Class:
+				'''«it.generate(umlType, "name")»*'''
+			Enumeration:
+				it.generate(umlType, "name")
+			default:
+				'''<codegen "«umlType.eClass.name»" not implemented>'''
 		}
 	}
-
 }
