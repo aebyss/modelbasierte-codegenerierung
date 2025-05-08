@@ -35,7 +35,7 @@ class EnumTemplate implements Template<Enumeration> {
 			}
 			case "implementation": {
 				return '''
-					#include "«umlEnum.name».h"
+					#include "«it.getPath(umlEnum, "declaration").toString.replace("\\", "/")»"
 					
 					«name» «name»_Literals[«umlEnum.ownedLiterals.size»] = {
 						«FOR literal : umlEnum.ownedLiterals SEPARATOR ','»

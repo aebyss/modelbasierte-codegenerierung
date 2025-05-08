@@ -2,7 +2,7 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
-import com.google.common.base.Objects;
+import java.util.Objects;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
@@ -10,64 +10,45 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
 public class ParameterTemplate implements Template<Parameter> {
+  private final String SEPARATOR = "_";
+
   @Override
   public String generateCode(final CodegenInterface it, final Parameter umlParameter, final String context) {
     String _xblockexpression = null;
     {
-      String typeName = "";
       String name = "";
-      if (context != null) {
-        switch (context) {
-          case "return":
-            ParameterDirectionKind _direction = umlParameter.getDirection();
-            boolean _tripleEquals = (_direction == ParameterDirectionKind.RETURN_LITERAL);
-            if (_tripleEquals) {
-              Type _type = umlParameter.getType();
-              boolean _tripleNotEquals = (_type != null);
-              if (_tripleNotEquals) {
-                typeName = it.generate(umlParameter.getType(), "name");
-              } else {
-                typeName = "void*";
-              }
-            }
+      String typeName = "void*";
+      Type _type = umlParameter.getType();
+      boolean _tripleNotEquals = (_type != null);
+      if (_tripleNotEquals) {
+        typeName = it.generate(umlParameter.getType(), "name");
+      }
+      Type _type_1 = umlParameter.getType();
+      if ((_type_1 instanceof org.eclipse.uml2.uml.Class)) {
+        typeName = (typeName + "*");
+      }
+      ParameterDirectionKind _direction = umlParameter.getDirection();
+      if (_direction != null) {
+        switch (_direction) {
+          case RETURN_LITERAL:
+            break;
+          case INOUT_LITERAL:
+            name = umlParameter.getName();
+            typeName = (typeName + "*");
+            break;
+          case OUT_LITERAL:
+            name = umlParameter.getName();
+            typeName = (typeName + "*");
             break;
           default:
-            {
-              name = it.generate(umlParameter, "name");
-              Type _type_1 = umlParameter.getType();
-              boolean _tripleNotEquals_1 = (_type_1 != null);
-              if (_tripleNotEquals_1) {
-                typeName = it.generate(umlParameter.getType(), "name");
-              } else {
-                typeName = "void*";
-              }
-            }
+            name = umlParameter.getName();
             break;
         }
       } else {
-        {
-          name = it.generate(umlParameter, "name");
-          Type _type_1 = umlParameter.getType();
-          boolean _tripleNotEquals_1 = (_type_1 != null);
-          if (_tripleNotEquals_1) {
-            typeName = it.generate(umlParameter.getType(), "name");
-          } else {
-            typeName = "void*";
-          }
-        }
-      }
-      if ((((umlParameter.getType() instanceof org.eclipse.uml2.uml.Class) || 
-        Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL)) || 
-        Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL))) {
-        typeName = (typeName + "*");
-      }
-      if (((umlParameter.getType() instanceof org.eclipse.uml2.uml.Class) && 
-        (Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL) || 
-          Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL)))) {
-        typeName = (typeName + "*");
+        name = umlParameter.getName();
       }
       String _xifexpression = null;
-      boolean _equals = Objects.equal(name, "");
+      boolean _equals = Objects.equals(name, "");
       if (_equals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(typeName);

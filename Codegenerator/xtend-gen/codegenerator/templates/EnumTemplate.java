@@ -77,9 +77,9 @@ public class EnumTemplate implements Template<Enumeration> {
         case "implementation":
           StringConcatenation _builder_2 = new StringConcatenation();
           _builder_2.append("#include \"");
-          String _name = umlEnum.getName();
-          _builder_2.append(_name);
-          _builder_2.append(".h\"");
+          String _replace = it.getPath(umlEnum, "declaration").toString().replace("\\", "/");
+          _builder_2.append(_replace);
+          _builder_2.append("\"");
           _builder_2.newLineIfNotEmpty();
           _builder_2.newLine();
           _builder_2.append(name);

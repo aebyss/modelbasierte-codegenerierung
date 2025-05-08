@@ -18,20 +18,16 @@ class ParameterTemplate implements Template<Parameter> {
 		var name = ""
 		var typeName = "void*"
 		if (umlParameter.type !== null) {
-			typeName = umlParameter.type.name
+			typeName = generate(umlParameter.type, "name")
 		}
 		
 		// Parameter hat keinen oder einen Type
 		if (umlParameter.type instanceof Class){
 			typeName = typeName + "*"
-		} else if (umlParameter.type instanceof Enumeration){
-			if (umlParameter.type.package !== null){
-				typeName = umlParameter.type.package.name + SEPARATOR + typeName	
-			}
+		} 
 			// ODER MIT
 			// typeName = generate(umlParameter.type, "name")
 			
-		}
 		
 		// Parameter hat einen ParameterDirectionKind
 		switch umlParameter.direction {

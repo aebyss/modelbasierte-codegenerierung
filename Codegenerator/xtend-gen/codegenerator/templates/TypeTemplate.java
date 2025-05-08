@@ -3,6 +3,7 @@ package codegenerator.templates;
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
 import java.util.Objects;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -21,9 +22,20 @@ public class TypeTemplate implements Template<Type> {
       if (umlType instanceof org.eclipse.uml2.uml.Class) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
+        _builder.append("umlType.");
         String _generate = it.generate(umlType, "name");
         _builder.append(_generate);
         _builder.append("*");
+        _switchResult = _builder.toString();
+      }
+    }
+    if (!_matched) {
+      if (umlType instanceof Enumeration) {
+        _matched=true;
+        StringConcatenation _builder = new StringConcatenation();
+        _builder.append("umlType.");
+        String _generate = it.generate(umlType, "name");
+        _builder.append(_generate);
         _switchResult = _builder.toString();
       }
     }

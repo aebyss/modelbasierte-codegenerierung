@@ -696,9 +696,9 @@ class TestClass {
 			name = "TestPackage"
 			ownedTypes += class
 		]
-
+	
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print(code)
 		Assert.assertEquals('''
 			#ifndef TESTPACKAGE_TESTCLASS_H
 			#define TESTPACKAGE_TESTCLASS_H

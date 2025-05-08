@@ -9,6 +9,7 @@ import java.util.LinkedList
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Type
+import org.eclipse.uml2.uml.Enumeration
 
 class ClassTemplate implements Template<Class> {
 
@@ -33,7 +34,7 @@ class ClassTemplate implements Template<Class> {
 			}
 			case "implementation": {
 				return '''
-					#include "«name».h"
+					#include "«umlClass.name».h"
 					«FOR operation : umlClass.ownedOperations»
 						
 						«generate(operation, "implementation")»
@@ -50,18 +51,19 @@ class ClassTemplate implements Template<Class> {
 		val types = new HashSet<Type>()
 
 		for (property : umlClass.ownedAttributes) {
-			if (property.type instanceof Class) {
+			if (property.type instanceof Class || property.type instanceof Enumeration) {
 				types.add(property.type)
-			}
+		}
 		}
 
 		for (operation : umlClass.ownedOperations) {
 			for (parameter : operation.ownedParameters) {
-				if (parameter.type instanceof Class) {
+				if (parameter.type instanceof Class || parameter.type instanceof Enumeration) {
 					types.add(parameter.type)
 				}
 			}
 		}
+		
 
 		val includes = new HashSet<String>()
 		for (type : types) {
@@ -73,12 +75,18 @@ class ClassTemplate implements Template<Class> {
 		«include»
 		«ENDFOR»
 		'''
+		
 	}
 
 	def generatePath(CodegenInterface it, NamedElement from, NamedElement to) {
 		val fromPath = getPath(from, "declaration")
 		val toPath = getPath(to, "declaration")
-
+		
+		if (fromPath === null || toPath === null) {
+			val relPath = fromPath.parent?.relativize(toPath) ?: toPath
+			return relPath.toString.replace("\\", "/")
+		}
+		
 		val relPath = fromPath.parent?.relativize(toPath) ?: toPath
 		return relPath.join("/")
 	}

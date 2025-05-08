@@ -19,7 +19,6 @@ class TestStructuredClassifier {
 		]
 
 		val code = (new Uml2C).generateCode(class, "typedefinition")
-
 		Assert.assertEquals('''
 			typedef struct TestClass_struct {
 			} TestClass;
@@ -35,7 +34,6 @@ class TestStructuredClassifier {
 		]
 
 		val code = (new Uml2C).generateCode(class, "typedefinition")
-
 		Assert.assertEquals('''
 			typedef struct ClassTest_struct {
 			} ClassTest;

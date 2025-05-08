@@ -11,15 +11,23 @@ class StructuredClassifierTemplate implements Template<StructuredClassifier> {
 		
 		switch context {
 			case "typedefinition": {
+				
+				//generate(umlEnum, "name")
 				val name = umlClassifier.qualifiedName.replace("::", "_") ?: umlClassifier.name
 				
-				//properties der klasse holen
+				
+				//alle attribute sammeln	
 				val properties = umlClassifier.ownedAttributes
 				
+				
+				//attribut zeilen bauen	
 				val attributeStrings = properties.map[p |
 					"\t" + it.generate(p, "attribute")
 				].join("\n")
 				
+				//struct block bauen	
+				
+				//kompakter machen und im enumTemplate 
 				'''
 				typedef struct «name»_struct {
 				«IF attributeStrings.empty»
