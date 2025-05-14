@@ -127,7 +127,7 @@ class OperationTemplate implements Template<Operation> {
 			else
 				#[]
 		val allParamsList = baseParams + paramStrings
-		val allParams = if(allParamsList.empty) "void" else allParamsList.join(", ")
+		val allParams = if(allParamsList.empty) "" else allParamsList.join(", ")
 	
 		// Signatur
 		val signature = '''«returnType» «className»_«umlOperation.name»(«allParams»)'''
