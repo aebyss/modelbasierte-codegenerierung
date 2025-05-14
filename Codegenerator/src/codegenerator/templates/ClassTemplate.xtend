@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.Dependency
+import org.eclipse.uml2.uml.Artifact
 
 class ClassTemplate implements Template<Class> {
 

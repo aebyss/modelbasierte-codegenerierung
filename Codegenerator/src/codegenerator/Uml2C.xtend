@@ -1,5 +1,6 @@
 package codegenerator
 
+import codegenerator.templates.ArtifactTemplate
 import codegenerator.templates.ClassTemplate
 import codegenerator.templates.EnumLiteralTemplate
 import codegenerator.templates.EnumTemplate
@@ -19,6 +20,7 @@ import java.util.HashSet
 import java.util.LinkedList
 import java.util.Map
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.uml2.uml.Artifact
 import org.eclipse.uml2.uml.Behavior
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Enumeration
@@ -89,6 +91,7 @@ class Uml2C {
 		registerTemplate(new StructuredClassifierTemplate(), typeof(StructuredClassifier), "typedefinition")
 		registerTemplate(new TypeTemplate(), typeof(Type), "type")
 		registerTemplate(new TypeTemplate(), null, "type")
+		registerTemplate(new ArtifactTemplate(), typeof(Artifact), "type") 
 	}
 	new() {
 		this(Collections.emptyMap)
