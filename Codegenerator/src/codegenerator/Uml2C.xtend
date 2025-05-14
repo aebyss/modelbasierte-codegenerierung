@@ -33,6 +33,8 @@ import org.eclipse.uml2.uml.Property
 import org.eclipse.uml2.uml.StructuredClassifier
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.ValueSpecification
+import codegenerator.templates.MainTemplate
+
 
 /**
  * Code generator that takes UML Elements and generates C code from them.
@@ -92,6 +94,8 @@ class Uml2C {
 		registerTemplate(new TypeTemplate(), typeof(Type), "type")
 		registerTemplate(new TypeTemplate(), null, "type")
 		registerTemplate(new ArtifactTemplate(), typeof(Artifact), "type") 
+		registerTemplate(new MainTemplate(), typeof(org.eclipse.uml2.uml.Model), "main")
+		
 	}
 	new() {
 		this(Collections.emptyMap)

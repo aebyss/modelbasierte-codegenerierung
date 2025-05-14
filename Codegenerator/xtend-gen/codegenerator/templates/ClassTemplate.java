@@ -9,79 +9,139 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.InstanceSpecification;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Relationship;
+import org.eclipse.uml2.uml.Slot;
+import org.eclipse.uml2.uml.StructuralFeature;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Functions.Function1;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
+import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
 @SuppressWarnings("all")
 public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
   @Override
   public String generateCode(final CodegenInterface it, final org.eclipse.uml2.uml.Class umlClass, final String context) {
-    String _xifexpression = null;
-    String _name = umlClass.getName();
-    boolean _tripleNotEquals = (_name != null);
-    if (_tripleNotEquals) {
-      _xifexpression = it.generate(umlClass, "name");
-    } else {
-      _xifexpression = "UnnamedClass";
+    String _elvis = null;
+    org.eclipse.uml2.uml.Package _nearestPackage = umlClass.getNearestPackage();
+    String _name = null;
+    if (_nearestPackage!=null) {
+      _name=_nearestPackage.getName();
     }
-    final String name = _xifexpression;
+    if (_name != null) {
+      _elvis = _name;
+    } else {
+      _elvis = "Model";
+    }
+    final String modelName = _elvis;
     if (context != null) {
       switch (context) {
         case "declaration":
+          String _elvis_1 = null;
+          String _name_1 = umlClass.getName();
+          if (_name_1 != null) {
+            _elvis_1 = _name_1;
+          } else {
+            _elvis_1 = "UnnamedClass";
+          }
+          final String className = _elvis_1;
+          final String structName = ((modelName + "_") + className);
+          final Model model = umlClass.getModel();
+          Iterable<InstanceSpecification> _xifexpression = null;
+          if ((model != null)) {
+            final Function1<InstanceSpecification, Boolean> _function = (InstanceSpecification it_1) -> {
+              return Boolean.valueOf(it_1.getClassifiers().contains(umlClass));
+            };
+            _xifexpression = IterableExtensions.<InstanceSpecification>filter(Iterables.<InstanceSpecification>filter(model.allOwnedElements(), InstanceSpecification.class), _function);
+          } else {
+            _xifexpression = CollectionLiterals.<InstanceSpecification>emptyList();
+          }
+          final Iterable<InstanceSpecification> instances = _xifexpression;
+          final Function1<InstanceSpecification, String> _function_1 = (InstanceSpecification inst) -> {
+            String _name_2 = inst.getName();
+            String _plus = ((((("extern " + structName) + " ") + modelName) + "_") + _name_2);
+            return (_plus + ";");
+          };
+          final String externs = IterableExtensions.join(IterableExtensions.<InstanceSpecification, String>map(instances, _function_1), "\n");
           StringConcatenation _builder = new StringConcatenation();
           _builder.append("#ifndef ");
-          String _upperCase = name.toUpperCase();
+          String _upperCase = modelName.toUpperCase();
           _builder.append(_upperCase);
-          _builder.append("_H");
-          _builder.newLineIfNotEmpty();
-          _builder.append("#define ");
-          String _upperCase_1 = name.toUpperCase();
+          _builder.append("_");
+          String _upperCase_1 = className.toUpperCase();
           _builder.append(_upperCase_1);
           _builder.append("_H");
           _builder.newLineIfNotEmpty();
-          _builder.newLine();
-          String _generateIncludes = this.generateIncludes(it, umlClass);
-          _builder.append(_generateIncludes);
+          _builder.append("#define ");
+          String _upperCase_2 = modelName.toUpperCase();
+          _builder.append(_upperCase_2);
+          _builder.append("_");
+          String _upperCase_3 = className.toUpperCase();
+          _builder.append(_upperCase_3);
+          _builder.append("_H");
           _builder.newLineIfNotEmpty();
-          String _generate = it.generate(umlClass, "typedefinition");
-          _builder.append(_generate);
+          _builder.newLine();
+          _builder.append("typedef struct ");
+          _builder.append(structName);
+          _builder.append("_struct {");
+          _builder.newLineIfNotEmpty();
+          _builder.append("} ");
+          _builder.append(structName);
+          _builder.append(";");
           _builder.newLineIfNotEmpty();
           _builder.newLine();
-          {
-            EList<Operation> _ownedOperations = umlClass.getOwnedOperations();
-            for(final Operation operation : _ownedOperations) {
-              String _generate_1 = it.generate(operation, "declaration");
-              _builder.append(_generate_1);
-              _builder.newLineIfNotEmpty();
-              _builder.newLine();
-            }
-          }
+          _builder.append(externs);
+          _builder.newLineIfNotEmpty();
+          _builder.newLine();
           _builder.append("#endif");
           _builder.newLine();
           return _builder.toString();
         case "implementation":
+          Iterable<InstanceSpecification> _xifexpression_1 = null;
+          Resource _eResource = umlClass.eResource();
+          boolean _tripleNotEquals = (_eResource != null);
+          if (_tripleNotEquals) {
+            final Function1<InstanceSpecification, Boolean> _function_2 = (InstanceSpecification it_1) -> {
+              return Boolean.valueOf(it_1.getClassifiers().contains(umlClass));
+            };
+            _xifexpression_1 = IterableExtensions.<InstanceSpecification>filter(Iterables.<InstanceSpecification>filter(IteratorExtensions.<EObject>toIterable(umlClass.eResource().getAllContents()), InstanceSpecification.class), _function_2);
+          } else {
+            _xifexpression_1 = CollectionLiterals.<InstanceSpecification>emptyList();
+          }
+          final Iterable<InstanceSpecification> instances_1 = _xifexpression_1;
           StringConcatenation _builder_1 = new StringConcatenation();
           _builder_1.append("#include \"");
-          String _name_1 = umlClass.getName();
-          _builder_1.append(_name_1);
+          String _name_2 = umlClass.getName();
+          _builder_1.append(_name_2);
           _builder_1.append(".h\"");
           _builder_1.newLineIfNotEmpty();
+          _builder_1.newLine();
           {
-            EList<Operation> _ownedOperations_1 = umlClass.getOwnedOperations();
-            for(final Operation operation_1 : _ownedOperations_1) {
-              _builder_1.newLine();
-              String _generate_2 = it.generate(operation_1, "implementation");
-              _builder_1.append(_generate_2);
+            EList<Operation> _ownedOperations = umlClass.getOwnedOperations();
+            for(final Operation operation : _ownedOperations) {
+              String _generate = it.generate(operation, "implementation");
+              _builder_1.append(_generate);
+              _builder_1.newLineIfNotEmpty();
+            }
+          }
+          _builder_1.newLine();
+          {
+            for(final InstanceSpecification inst : instances_1) {
+              String _generateInstanceCode = this.generateInstanceCode(it, modelName, umlClass, inst);
+              _builder_1.append(_generateInstanceCode);
               _builder_1.newLineIfNotEmpty();
             }
           }
@@ -89,6 +149,63 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
       }
     }
     return null;
+  }
+
+  public String generateInstanceCode(final CodegenInterface it, final String modelName, final org.eclipse.uml2.uml.Class cls, final InstanceSpecification inst) {
+    String _name = inst.getName();
+    final String instanceName = ((modelName + "_") + _name);
+    String _name_1 = cls.getName();
+    final String structName = ((modelName + "_") + _name_1);
+    boolean _isEmpty = inst.getSlots().isEmpty();
+    if (_isEmpty) {
+      StringConcatenation _builder = new StringConcatenation();
+      _builder.append(structName);
+      _builder.append(" ");
+      _builder.append(instanceName);
+      _builder.append(" = {");
+      _builder.newLineIfNotEmpty();
+      _builder.append("\t\t");
+      _builder.append("};");
+      _builder.newLine();
+      return _builder.toString();
+    } else {
+      StringConcatenation _builder_1 = new StringConcatenation();
+      _builder_1.append(structName);
+      _builder_1.append(" ");
+      _builder_1.append(instanceName);
+      _builder_1.append(" = {");
+      _builder_1.newLineIfNotEmpty();
+      {
+        EList<Slot> _slots = inst.getSlots();
+        boolean _hasElements = false;
+        for(final Slot slot : _slots) {
+          if (!_hasElements) {
+            _hasElements = true;
+          } else {
+            _builder_1.appendImmediate(",\n\t", "\t");
+          }
+          {
+            StructuralFeature _definingFeature = slot.getDefiningFeature();
+            boolean _tripleNotEquals = (_definingFeature != null);
+            if (_tripleNotEquals) {
+              _builder_1.append("\t");
+              _builder_1.append(".");
+              String _name_2 = slot.getDefiningFeature().getName();
+              _builder_1.append(_name_2, "\t");
+              _builder_1.append(" = …");
+              _builder_1.newLineIfNotEmpty();
+            } else {
+              _builder_1.append("\t");
+              _builder_1.append("/* missing definingFeature */");
+              _builder_1.newLine();
+            }
+          }
+        }
+      }
+      _builder_1.append("};");
+      _builder_1.newLine();
+      return _builder_1.toString();
+    }
   }
 
   public String generateIncludes(final CodegenInterface it, final org.eclipse.uml2.uml.Class umlClass) {

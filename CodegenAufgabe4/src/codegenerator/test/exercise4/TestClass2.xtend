@@ -26,7 +26,8 @@ class TestClass2 {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print("EMPTY_HEADER\n")
+		print(code)
 		Assert.assertEquals('''
 			#ifndef TESTMODEL_TESTCLASS_H
 			#define TESTMODEL_TESTCLASS_H
@@ -57,7 +58,8 @@ class TestClass2 {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print("EMPTY_HEADER_2\n")
+		print(code)
 		Assert.assertEquals('''
 			#ifndef MODEL_CLASSWITHINSTANCE_H
 			#define MODEL_CLASSWITHINSTANCE_H
@@ -682,6 +684,7 @@ class TestClass2 {
 			#endif
 		'''.toString, code)
 	}
+	
 
 	/**
 	 * 

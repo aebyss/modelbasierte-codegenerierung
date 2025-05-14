@@ -3,6 +3,7 @@ package codegenerator;
 import codegenerator.templates.ClassTemplate;
 import codegenerator.templates.EnumLiteralTemplate;
 import codegenerator.templates.EnumTemplate;
+import codegenerator.templates.MainTemplate;
 import codegenerator.templates.NameTemplate;
 import codegenerator.templates.NullTemplate;
 import codegenerator.templates.OpaqueBehaviorTemplate;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.uml2.uml.Behavior;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
 import org.eclipse.uml2.uml.Operation;
@@ -114,6 +116,8 @@ public class Uml2C {
     this.<Type>registerTemplate(_typeTemplate, Type.class, "type");
     TypeTemplate _typeTemplate_1 = new TypeTemplate();
     this.<Type>registerTemplate(_typeTemplate_1, null, "type");
+    MainTemplate _mainTemplate = new MainTemplate();
+    this.<Model>registerTemplate(_mainTemplate, Model.class, "main");
   }
 
   public Uml2C() {

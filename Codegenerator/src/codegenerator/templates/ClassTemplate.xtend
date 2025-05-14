@@ -12,40 +12,94 @@ import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.Dependency
 import org.eclipse.uml2.uml.Artifact
+import org.eclipse.uml2.uml.InstanceSpecification
+import org.eclipse.uml2.uml.Slot
 
 class ClassTemplate implements Template<Class> {
 
 	override String generateCode(CodegenInterface it, Class umlClass, String context) {
 		// TODO: Aufgabe 3
-		val name = if (umlClass.name !== null) generate(umlClass, "name") else "UnnamedClass"
+		val modelName = umlClass.nearestPackage?.name ?: "Model"
 		switch (context) {
 			case "declaration": {
+			val className = umlClass.name ?: "UnnamedClass"
+			val structName = modelName + "_" + className
+				val model = umlClass.model
+				val instances = if (model !== null)
+					model.allOwnedElements
+						.filter(typeof(InstanceSpecification))
+						.filter[it.classifiers.contains(umlClass)]
+				else emptyList
+
+				val externs = instances.map[inst |
+					"extern " + structName + " " + modelName + "_" + inst.name + ";"
+				].join("\n")
+
 				return '''
-					#ifndef «name.toUpperCase»_H
-					#define «name.toUpperCase»_H
-					
-					«this.generateIncludes(it, umlClass)»
-					«it.generate(umlClass, "typedefinition")»
-					
-					«FOR operation : umlClass.ownedOperations»
-						«generate(operation, "declaration")»
-						
-					«ENDFOR»
+					#ifndef «modelName.toUpperCase»_«className.toUpperCase»_H
+					#define «modelName.toUpperCase»_«className.toUpperCase»_H
+
+					typedef struct «structName»_struct {
+					} «structName»;
+
+					«externs»
+
 					#endif
 				'''.toString
 			}
+						
+			
 			case "implementation": {
+				val instances = if (umlClass.eResource !== null)
+				umlClass.eResource.allContents.toIterable
+					.filter(typeof(InstanceSpecification))
+					.filter[it.classifiers.contains(umlClass)]
+				else
+					emptyList
+
 				return '''
 					#include "«umlClass.name».h"
+
 					«FOR operation : umlClass.ownedOperations»
-						
 						«generate(operation, "implementation")»
+					«ENDFOR»
+
+					«FOR inst : instances»
+						«generateInstanceCode(it, modelName, umlClass, inst)»
 					«ENDFOR»
 				'''.toString
 			}
+				
 		}
 
 	}
+	
+	
+	
+	def String generateInstanceCode(CodegenInterface it, String modelName, Class cls, InstanceSpecification inst) {
+	val instanceName = modelName + "_" + inst.name
+	val structName = modelName + "_" + cls.name
+
+	if (inst.slots.empty) {
+		return '''«structName» «instanceName» = {
+		};
+		'''
+	} else {
+		return '''
+			«structName» «instanceName» = {
+				«FOR slot : inst.slots SEPARATOR ",\n\t"»
+					«IF slot.definingFeature !== null»
+						.«slot.definingFeature.name» = …
+					«ELSE»
+						/* missing definingFeature */
+					«ENDIF»
+				«ENDFOR»
+			};
+		'''
+	}
+}
+	
+	
 
 	// //////////////////////////////////////////////////////////////////
 	// ab hier war teils schon gegeben /////////////////////////////////
