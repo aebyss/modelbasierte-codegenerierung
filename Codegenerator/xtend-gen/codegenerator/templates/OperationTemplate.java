@@ -63,7 +63,7 @@ public class OperationTemplate implements Template<Operation> {
       String _xifexpression_3 = null;
       boolean _isEmpty = IterableExtensions.isEmpty(allParamsList);
       if (_isEmpty) {
-        _xifexpression_3 = "void";
+        _xifexpression_3 = "";
       } else {
         _xifexpression_3 = IterableExtensions.join(allParamsList, ", ");
       }

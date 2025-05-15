@@ -207,6 +207,7 @@ class TestStructuredClassifier {
 		]
 
 		val code = (new Uml2C).generateCode(class, "typedefinition")
+		print(code)
 
 		Assert.assertEquals('''
 			typedef struct SomePacket_TestClass_struct {

@@ -17,10 +17,14 @@ class TypeTemplate implements Template<Type> {
 		switch umlType {
 			PrimitiveType:
 				it.generate(umlType, "name")
-			Class:
-				'''«it.generate(umlType, "name")»*'''
-			Enumeration:
-				it.generate(umlType, "name")
+			Class: {
+				val prefix = umlType.nearestPackage?.name ?: "Model"
+				return prefix + "_" + umlType.name + "*"
+				}
+			Enumeration: {
+				val prefix = umlType.nearestPackage?.name ?: "Model"
+				return prefix + "_" + umlType.name + "*"
+				}
 			default:
 				'''<codegen "«umlType.eClass.name»" not implemented>'''
 		}

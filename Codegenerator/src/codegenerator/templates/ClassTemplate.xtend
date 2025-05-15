@@ -19,62 +19,85 @@ class ClassTemplate implements Template<Class> {
 
 	override String generateCode(CodegenInterface it, Class umlClass, String context) {
 		// TODO: Aufgabe 3
-		val modelName = umlClass.nearestPackage?.name ?: "Model"
+		
 		switch (context) {
 			case "declaration": {
-			val className = umlClass.name ?: "UnnamedClass"
+			val className = umlClass.name
+			val modelName = umlClass.model?.name ?: "Model"
 			val structName = modelName + "_" + className
-				val model = umlClass.model
-				val instances = if (model !== null)
-					model.allOwnedElements
-						.filter(typeof(InstanceSpecification))
-						.filter[it.classifiers.contains(umlClass)]
-				else emptyList
-
-				val externs = instances.map[inst |
-					"extern " + structName + " " + modelName + "_" + inst.name + ";"
-				].join("\n")
-
-				return '''
-					#ifndef «modelName.toUpperCase»_«className.toUpperCase»_H
-					#define «modelName.toUpperCase»_«className.toUpperCase»_H
-
-					typedef struct «structName»_struct {
-					} «structName»;
-
-					«externs»
-
-					#endif
-				'''.toString
-			}
-						
+			val guard = it.generate(umlClass, "name").toUpperCase
 			
-			case "implementation": {
-				val instances = if (umlClass.eResource !== null)
-				umlClass.eResource.allContents.toIterable
+			
+			val model = umlClass.model
+			val instances = if (model !== null)
+				model.allOwnedElements
 					.filter(typeof(InstanceSpecification))
 					.filter[it.classifiers.contains(umlClass)]
-				else
-					emptyList
+			else emptyList
+			
+			val includes = generateIncludes(it, umlClass)
+			val typedef = it.generate(umlClass, "typedefinition")
+			val externs = instances.map[inst |
+				"extern " + structName + " " + modelName + "_" + inst.name + ";"
+			].join("\n")
+			val operationDecls = umlClass.ownedOperations.map[op |
+				it.generate(op, "declaration").trim
+			].join("\n\n")
+			
 
-				return '''
-					#include "«umlClass.name».h"
-
-					«FOR operation : umlClass.ownedOperations»
-						«generate(operation, "implementation")»
-					«ENDFOR»
-
-					«FOR inst : instances»
-						«generateInstanceCode(it, modelName, umlClass, inst)»
-					«ENDFOR»
-				'''.toString
-			}
+			return '''
+				#ifndef «guard»_H
+				#define «guard»_H
 				
+				«includes»
+				«typedef»
+				«IF !operationDecls.empty»
+				
+				«operationDecls»
+				«ENDIF»
+				«IF !externs.empty»
+				
+				«externs»
+				«ENDIF»
+				
+				#endif
+			'''.toString
 		}
+		case "implementation": {
+			val model = umlClass.model
+			val modelName = umlClass.nearestPackage?.name ?: umlClass.model?.name ?: "Model"
+			val instances = if (model !== null)
+				model.allOwnedElements
+					.filter(typeof(InstanceSpecification))
+					.filter[it.classifiers.contains(umlClass)]
+			else emptyList
+			
+			val structName = modelName + "_" + umlClass.name
+			val headerPath = umlClass.name + ".h"
+			
+			val operationImpls = umlClass.ownedOperations.map[op |
+				it.generate(op, "implementation").trim
+			].join("\n\n").trim
+			
+			val instanceCode = instances.map[inst |
+				it.generateInstanceCode(modelName, umlClass, inst)
+			].join("\n")
+			
+return '''
+#include "«headerPath»"
+«IF !operationImpls.empty»
 
+«operationImpls»
+«ENDIF»
+«IF !instanceCode.empty»
+
+«instanceCode»
+«ENDIF»
+'''.toString
+			}	
+				}
+				
 	}
-	
-	
 	
 	def String generateInstanceCode(CodegenInterface it, String modelName, Class cls, InstanceSpecification inst) {
 	val instanceName = modelName + "_" + inst.name
@@ -82,22 +105,37 @@ class ClassTemplate implements Template<Class> {
 
 	if (inst.slots.empty) {
 		return '''«structName» «instanceName» = {
-		};
-		'''
-	} else {
-		return '''
-			«structName» «instanceName» = {
-				«FOR slot : inst.slots SEPARATOR ",\n\t"»
-					«IF slot.definingFeature !== null»
-						.«slot.definingFeature.name» = …
-					«ELSE»
-						/* missing definingFeature */
-					«ENDIF»
-				«ENDFOR»
-			};
-		'''
+};
+'''
 	}
+
+		val assignments = inst.slots.map[slot |
+			val attrName = slot.definingFeature?.name ?: "UNKNOWN"
+			val values = slot.values
+
+			val valueText = if (values.size > 1)
+				'''{
+	«values.map[v | it.generate(v, "value")].join(",\n")»
+}'''
+			else if (values.isEmpty || values.head == null)
+				"0"
+			else
+				it.generate(values.head, "value")
+
+			'''.«attrName» = «valueText»'''
+		].join(",\n")	
+
+	return '''
+«structName» «instanceName» = {
+	«assignments»
+};
+'''
 }
+	
+	
+	
+	
+	
 	
 	
 

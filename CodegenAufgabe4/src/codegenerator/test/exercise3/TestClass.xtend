@@ -69,7 +69,8 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print("test_class_withproperties\n")
+		print(code)
 		Assert.assertEquals('''
 			#ifndef VEC2_H
 			#define VEC2_H
@@ -104,7 +105,8 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print("Headerwthpropertyand operation\n")
+		print(code)
 		Assert.assertEquals('''
 			#ifndef TESTCLASS_H
 			#define TESTCLASS_H
@@ -174,7 +176,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		print("<<i<" + "\n" + code + "\n" + ">>>")
 		Assert.assertEquals('''
 			#ifndef WORLD_H
 			#define WORLD_H
@@ -561,6 +563,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "implementation")
+		print("<<<" + "\n" + code + "\n" + ">>>")
 
 		Assert.assertEquals('''
 			#include "TestClass.h"
@@ -596,6 +599,7 @@ class TestClass {
 
 		val code = (new Uml2C).generateCode(class, "implementation")
 
+		print("<<<" + "\n" + code + "\n" + ">>>")
 		Assert.assertEquals('''
 			#include "NestedClass.h"
 			
@@ -800,6 +804,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
+		print("<<<" + code + ">>>\n")
 
 		Assert.assertEquals('''
 			#ifndef TESTPACKAGE_TESTCLASS_H

@@ -25,17 +25,41 @@ public class TypeTemplate implements Template<Type> {
       if (!_matched) {
         if (umlType instanceof org.eclipse.uml2.uml.Class) {
           _matched=true;
-          StringConcatenation _builder = new StringConcatenation();
-          String _generate = it.generate(umlType, "name");
-          _builder.append(_generate);
-          _builder.append("*");
-          _switchResult = _builder.toString();
+          String _elvis = null;
+          org.eclipse.uml2.uml.Package _nearestPackage = ((org.eclipse.uml2.uml.Class)umlType).getNearestPackage();
+          String _name = null;
+          if (_nearestPackage!=null) {
+            _name=_nearestPackage.getName();
+          }
+          if (_name != null) {
+            _elvis = _name;
+          } else {
+            _elvis = "Model";
+          }
+          final String prefix = _elvis;
+          String _name_1 = ((org.eclipse.uml2.uml.Class)umlType).getName();
+          String _plus = ((prefix + "_") + _name_1);
+          return (_plus + "*");
         }
       }
       if (!_matched) {
         if (umlType instanceof Enumeration) {
           _matched=true;
-          _switchResult = it.generate(umlType, "name");
+          String _elvis = null;
+          org.eclipse.uml2.uml.Package _nearestPackage = ((Enumeration)umlType).getNearestPackage();
+          String _name = null;
+          if (_nearestPackage!=null) {
+            _name=_nearestPackage.getName();
+          }
+          if (_name != null) {
+            _elvis = _name;
+          } else {
+            _elvis = "Model";
+          }
+          final String prefix = _elvis;
+          String _name_1 = ((Enumeration)umlType).getName();
+          String _plus = ((prefix + "_") + _name_1);
+          return (_plus + "*");
         }
       }
       if (!_matched) {

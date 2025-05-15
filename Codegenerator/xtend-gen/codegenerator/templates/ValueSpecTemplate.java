@@ -2,12 +2,15 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
+import org.eclipse.uml2.uml.InstanceSpecification;
+import org.eclipse.uml2.uml.InstanceValue;
 import org.eclipse.uml2.uml.LiteralBoolean;
 import org.eclipse.uml2.uml.LiteralInteger;
 import org.eclipse.uml2.uml.LiteralNull;
 import org.eclipse.uml2.uml.LiteralReal;
 import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
+import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.ValueSpecification;
 
 @SuppressWarnings("all")
@@ -64,6 +67,24 @@ public class ValueSpecTemplate implements Template<ValueSpecification> {
           _xifexpression = "0";
         }
         return _xifexpression;
+      }
+    }
+    if (!_matched) {
+      if (umlLiteralSpec instanceof InstanceValue) {
+        _matched=true;
+        final InstanceSpecification instance = ((InstanceValue)umlLiteralSpec).getInstance();
+        if ((instance == null)) {
+          return "0";
+        }
+        final Model model = instance.getModel();
+        if ((model == null)) {
+          return "0";
+        }
+        String _name = model.getName();
+        String _plus = ("&" + _name);
+        String _plus_1 = (_plus + "_");
+        String _name_1 = instance.getName();
+        return (_plus_1 + _name_1);
       }
     }
     return umlLiteralSpec.stringValue();

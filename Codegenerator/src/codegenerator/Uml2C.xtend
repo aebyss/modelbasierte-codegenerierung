@@ -34,6 +34,8 @@ import org.eclipse.uml2.uml.StructuredClassifier
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.ValueSpecification
 import codegenerator.templates.MainTemplate
+import org.eclipse.uml2.uml.InstanceValue
+import org.eclipse.uml2.uml.ValueSpecification
 
 
 /**
@@ -95,6 +97,8 @@ class Uml2C {
 		registerTemplate(new TypeTemplate(), null, "type")
 		registerTemplate(new ArtifactTemplate(), typeof(Artifact), "type") 
 		registerTemplate(new MainTemplate(), typeof(org.eclipse.uml2.uml.Model), "main")
+		registerTemplate(new ValueSpecTemplate(), typeof(ValueSpecification), "value")
+		registerTemplate(new ValueSpecTemplate(), typeof(InstanceValue), "value")
 		
 	}
 	new() {

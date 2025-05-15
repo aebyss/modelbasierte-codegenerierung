@@ -9,6 +9,8 @@ import org.eclipse.uml2.uml.LiteralReal
 import org.eclipse.uml2.uml.LiteralString
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.ValueSpecification
+import org.eclipse.uml2.uml.InstanceValue
+
 
 class ValueSpecTemplate implements Template<ValueSpecification> {
 
@@ -28,6 +30,16 @@ class ValueSpecTemplate implements Template<ValueSpecification> {
 				return "NULL"
 			LiteralBoolean:
 				return if(umlLiteralSpec.booleanValue) "1" else "0"
+			InstanceValue: { //instance value added
+				val instance = umlLiteralSpec.instance
+				if (instance === null) 
+					return "0"
+					
+				val model = instance.model
+				if (model === null) 
+					return "0"
+				return "&" + model.name + "_" + instance.name		
+			}
 		}
 
 		return umlLiteralSpec.stringValue

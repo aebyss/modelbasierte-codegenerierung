@@ -1,5 +1,6 @@
 package codegenerator;
 
+import codegenerator.templates.ArtifactTemplate;
 import codegenerator.templates.ClassTemplate;
 import codegenerator.templates.EnumLiteralTemplate;
 import codegenerator.templates.EnumTemplate;
@@ -22,9 +23,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.uml2.uml.Artifact;
 import org.eclipse.uml2.uml.Behavior;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.eclipse.uml2.uml.InstanceValue;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
@@ -116,8 +119,14 @@ public class Uml2C {
     this.<Type>registerTemplate(_typeTemplate, Type.class, "type");
     TypeTemplate _typeTemplate_1 = new TypeTemplate();
     this.<Type>registerTemplate(_typeTemplate_1, null, "type");
+    ArtifactTemplate _artifactTemplate = new ArtifactTemplate();
+    this.<Artifact>registerTemplate(_artifactTemplate, Artifact.class, "type");
     MainTemplate _mainTemplate = new MainTemplate();
     this.<Model>registerTemplate(_mainTemplate, Model.class, "main");
+    ValueSpecTemplate _valueSpecTemplate_1 = new ValueSpecTemplate();
+    this.<ValueSpecification>registerTemplate(_valueSpecTemplate_1, ValueSpecification.class, "value");
+    ValueSpecTemplate _valueSpecTemplate_2 = new ValueSpecTemplate();
+    this.<InstanceValue>registerTemplate(_valueSpecTemplate_2, InstanceValue.class, "value");
   }
 
   public Uml2C() {
