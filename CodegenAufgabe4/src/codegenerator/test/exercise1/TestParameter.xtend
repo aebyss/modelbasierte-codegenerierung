@@ -34,7 +34,8 @@ class TestParameter {
 		]
 
 		val code = (new Uml2C).generateCode(parameter, "parameter")
-
+		println("SIMPLE FLOAT PARAMETER")
+		println(code)
 		Assert.assertEquals("float simpleFloatParameter", code)
 	}
 

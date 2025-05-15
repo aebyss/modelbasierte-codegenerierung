@@ -199,7 +199,7 @@ class TestOperation {
 
 		val code = (new Uml2C).generateCode(operation, "declaration")
 
-		Assert.assertEquals("void TestClass_staticOperation();", code)
+		Assert.assertEquals("void TestClass_staticOperation(void);", code)
 	}
 
 	/**
@@ -217,7 +217,7 @@ class TestOperation {
 
 		val code = (new Uml2C).generateCode(operation, "declaration")
 
-		Assert.assertEquals("void TestType_staticFunction();", code)
+		Assert.assertEquals("void TestType_staticFunction(void);", code)
 	}
 
 	/**

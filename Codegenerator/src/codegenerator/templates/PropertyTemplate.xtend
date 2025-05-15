@@ -19,7 +19,7 @@ class PropertyTemplate implements Template<Property> {
 		var name = umlProperty.name
 		var typeName = "void*"
 		if (umlProperty.type !== null) {
-			typeName = it.generate(umlProperty.type, "name")
+			typeName = it.generate(umlProperty.type, "typename")
 		}
 		var pointer = ""
 		var upperBound = ""
@@ -44,12 +44,11 @@ class PropertyTemplate implements Template<Property> {
 			if (umlProperty.upper > 1) {
 				upperBound = "[" + umlProperty.upper + "]"
 			} else if (umlProperty.upper == -1){
-				// Ein Upper-Bound von -1 bedeutet, dass die Anzahl unbegrenzt ist.
+				// Ein Upper-Bound von -1 unbegrenzt
 				pointer += "*"
 			}
 		}
         
-        // Rückgabe der Werte
         '''«typeName»«pointer» «name»«upperBound»;'''
     }
 

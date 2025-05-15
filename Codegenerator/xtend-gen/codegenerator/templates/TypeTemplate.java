@@ -2,10 +2,15 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
+import java.util.LinkedList;
+import java.util.Objects;
+import org.eclipse.uml2.uml.Artifact;
 import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.xtend2.lib.StringConcatenation;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class TypeTemplate implements Template<Type> {
@@ -20,46 +25,53 @@ public class TypeTemplate implements Template<Type> {
       boolean _matched = false;
       if (umlType instanceof PrimitiveType) {
         _matched=true;
-        _switchResult = it.generate(umlType, "name");
+        _switchResult = this.mapPrimitive(((PrimitiveType)umlType).getName());
       }
       if (!_matched) {
         if (umlType instanceof org.eclipse.uml2.uml.Class) {
           _matched=true;
-          String _elvis = null;
-          org.eclipse.uml2.uml.Package _nearestPackage = ((org.eclipse.uml2.uml.Class)umlType).getNearestPackage();
-          String _name = null;
-          if (_nearestPackage!=null) {
-            _name=_nearestPackage.getName();
+          final LinkedList<String> pathParts = new LinkedList<String>();
+          Namespace parent = ((org.eclipse.uml2.uml.Class)umlType).getNamespace();
+          while ((parent != null)) {
+            {
+              pathParts.addFirst(parent.getName());
+              parent = parent.getNamespace();
+            }
           }
-          if (_name != null) {
-            _elvis = _name;
-          } else {
-            _elvis = "Model";
-          }
-          final String prefix = _elvis;
-          String _name_1 = ((org.eclipse.uml2.uml.Class)umlType).getName();
-          String _plus = ((prefix + "_") + _name_1);
-          return (_plus + "*");
+          pathParts.add(((org.eclipse.uml2.uml.Class)umlType).getName());
+          return IterableExtensions.join(pathParts, "_");
         }
       }
       if (!_matched) {
         if (umlType instanceof Enumeration) {
           _matched=true;
-          String _elvis = null;
-          org.eclipse.uml2.uml.Package _nearestPackage = ((Enumeration)umlType).getNearestPackage();
-          String _name = null;
-          if (_nearestPackage!=null) {
-            _name=_nearestPackage.getName();
+          final LinkedList<String> pathParts = new LinkedList<String>();
+          Namespace parent = ((Enumeration)umlType).getNamespace();
+          while ((parent != null)) {
+            {
+              pathParts.addFirst(parent.getName());
+              parent = parent.getNamespace();
+            }
           }
-          if (_name != null) {
-            _elvis = _name;
+          pathParts.add(((Enumeration)umlType).getName());
+          return IterableExtensions.join(pathParts, "_");
+        }
+      }
+      if (!_matched) {
+        if (umlType instanceof Artifact) {
+          _matched=true;
+          final String name = ((Artifact)umlType).getName();
+          if (((!Objects.equals(name, null)) && name.endsWith(".h"))) {
+            return name.replace(".h", "");
           } else {
-            _elvis = "Model";
+            String _elvis = null;
+            if (name != null) {
+              _elvis = name;
+            } else {
+              _elvis = "artifact_type";
+            }
+            return _elvis;
           }
-          final String prefix = _elvis;
-          String _name_1 = ((Enumeration)umlType).getName();
-          String _plus = ((prefix + "_") + _name_1);
-          return (_plus + "*");
         }
       }
       if (!_matched) {
@@ -73,5 +85,31 @@ public class TypeTemplate implements Template<Type> {
       _xblockexpression = _switchResult;
     }
     return _xblockexpression;
+  }
+
+  public String mapPrimitive(final String name) {
+    String _switchResult = null;
+    if (name != null) {
+      switch (name) {
+        case "Integer":
+          _switchResult = "int32_t";
+          break;
+        case "Real":
+          _switchResult = "float";
+          break;
+        case "Boolean":
+          _switchResult = "bool";
+          break;
+        case "String":
+          _switchResult = "char*";
+          break;
+        default:
+          _switchResult = name;
+          break;
+      }
+    } else {
+      _switchResult = name;
+    }
+    return _switchResult;
   }
 }

@@ -30,6 +30,7 @@ import org.eclipse.uml2.uml.OpaqueBehavior
 import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.Property
+import org.eclipse.uml2.uml.PrimitiveType
 import org.eclipse.uml2.uml.StructuredClassifier
 import org.eclipse.uml2.uml.Type
 import org.eclipse.uml2.uml.ValueSpecification
@@ -85,7 +86,6 @@ class Uml2C {
 		registerTemplate(new EnumTemplate(), typeof(Enumeration), "implementation")
 		registerTemplate(new ValueSpecTemplate(), typeof(ValueSpecification), "value")
 		registerTemplate(new NameTemplate(), typeof(NamedElement), "name")
-		registerTemplate(new OpaqueBehaviorTemplate(), typeof(OpaqueBehavior), "behavior")
 		registerTemplate(new OperationTemplate(), typeof(Operation), "implementation")
 		registerTemplate(new OperationTemplate(), typeof(Operation), "declaration")
 		registerTemplate(new ParameterTemplate(), typeof(Parameter), "parameter")
@@ -99,6 +99,13 @@ class Uml2C {
 		registerTemplate(new MainTemplate(), typeof(org.eclipse.uml2.uml.Model), "main")
 		registerTemplate(new ValueSpecTemplate(), typeof(ValueSpecification), "value")
 		registerTemplate(new ValueSpecTemplate(), typeof(InstanceValue), "value")
+		val typeTemplate = new TypeTemplate
+		registerTemplate(typeTemplate, typeof(Type), "typename")
+		registerTemplate(typeTemplate, typeof(Class), "typename")
+		registerTemplate(typeTemplate, typeof(PrimitiveType), "typename")
+		registerTemplate(typeTemplate, typeof(Enumeration), "typename")
+		registerTemplate(new OpaqueBehaviorTemplate(), typeof(OpaqueBehavior), "behavior")
+		registerTemplate(new OpaqueBehaviorTemplate(), typeof(OpaqueBehavior), "name")
 		
 	}
 	new() {

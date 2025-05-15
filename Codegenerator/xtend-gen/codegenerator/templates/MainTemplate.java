@@ -27,14 +27,23 @@ public class MainTemplate implements Template<Model> {
       final Function1<InstanceSpecification, EList<Classifier>> _function_1 = (InstanceSpecification it_1) -> {
         return it_1.getClassifiers();
       };
-      final Function1<org.eclipse.uml2.uml.Class, Path> _function_2 = (org.eclipse.uml2.uml.Class cls) -> {
-        return it.getPath(cls, "declaration");
+      final Function1<org.eclipse.uml2.uml.Class, String> _function_2 = (org.eclipse.uml2.uml.Class cls) -> {
+        Path _path = it.getPath(cls, "declaration");
+        String _string = null;
+        if (_path!=null) {
+          _string=_path.toString();
+        }
+        String _replace = null;
+        if (_string!=null) {
+          _replace=_string.replace("\\", "/");
+        }
+        return _replace;
       };
-      final Iterable<Path> includes = IterableExtensions.<org.eclipse.uml2.uml.Class, Path>map(IterableExtensions.<org.eclipse.uml2.uml.Class>toSet(Iterables.<org.eclipse.uml2.uml.Class>filter(IterableExtensions.<InstanceSpecification, Classifier>flatMap(instances, _function_1), org.eclipse.uml2.uml.Class.class)), _function_2);
+      final List<String> includes = IterableExtensions.<String>toList(IterableExtensions.<String>filterNull(IterableExtensions.<org.eclipse.uml2.uml.Class, String>map(IterableExtensions.<org.eclipse.uml2.uml.Class>toSet(Iterables.<org.eclipse.uml2.uml.Class>filter(IterableExtensions.<InstanceSpecification, Classifier>flatMap(instances, _function_1), org.eclipse.uml2.uml.Class.class)), _function_2)));
       StringConcatenation _builder = new StringConcatenation();
       {
-        List<Path> _sort = IterableExtensions.<Path>sort(includes);
-        for(final Path path : _sort) {
+        List<String> _sort = IterableExtensions.<String>sort(includes);
+        for(final String path : _sort) {
           _builder.append("#include \"");
           _builder.append(path);
           _builder.append("\"");

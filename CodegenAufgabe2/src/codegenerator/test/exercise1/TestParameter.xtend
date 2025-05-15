@@ -18,9 +18,11 @@ class TestParameter {
 			name = "testParameter"
 			type = createPrimitiveType => [name = "uint32"]
 		]
-
+		
+		
 		val code = (new Uml2C).generateCode(parameter, "parameter")
-
+		
+		print(code)
 		Assert.assertEquals("uint32 testParameter", code)
 	}
 

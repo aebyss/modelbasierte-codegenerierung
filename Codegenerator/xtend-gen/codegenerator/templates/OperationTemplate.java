@@ -14,6 +14,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
@@ -63,7 +64,7 @@ public class OperationTemplate implements Template<Operation> {
       String _xifexpression_3 = null;
       boolean _isEmpty = IterableExtensions.isEmpty(allParamsList);
       if (_isEmpty) {
-        _xifexpression_3 = "";
+        _xifexpression_3 = "void";
       } else {
         _xifexpression_3 = IterableExtensions.join(allParamsList, ", ");
       }
@@ -123,6 +124,11 @@ public class OperationTemplate implements Template<Operation> {
             }
             _switchResult = _xblockexpression_1;
             break;
+          case "name":
+            String _name_1 = umlOperation.getName();
+            final String name = ((className + "_") + _name_1);
+            InputOutput.<String>println(("️OperationTemplate.name => " + name));
+            return name;
           default:
             StringConcatenation _builder_1 = new StringConcatenation();
             _builder_1.append("// Unknown context: ");

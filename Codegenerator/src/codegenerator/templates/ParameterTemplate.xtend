@@ -12,51 +12,42 @@ class ParameterTemplate implements Template<Parameter> {
 	val String SEPARATOR = "_"
 	
 	override generateCode(CodegenInterface it, Parameter umlParameter, String context) {
-		// Aufgabe 1, 2
+		val isReturn = context == "return"
+		val isInout = umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL
+		val isOut = umlParameter.direction == ParameterDirectionKind.OUT_LITERAL
+		val isClass = umlParameter.type instanceof Class
 
-		// Parameter (sowie Type) ist ein NamedElement
-		var name = ""
+		// Basis-Typname float, MyClass
 		var typeName = if (umlParameter.type !== null)
-			it.generate(umlParameter.type, "name")
+			it.generate(umlParameter.type, "typename")
 		else
 			"void*"
-		if (umlParameter.type !== null) {
-			typeName = generate(umlParameter.type, "name")
+		
+		//angepasst	
+		if (isClass && (isOut || isInout)) {
+			typeName += "**"
+		} else if (isClass || isOut || isInout) {
+			typeName += "*"
 		}
-		
-		// Parameter hat keinen oder einen Type
-		if (umlParameter.type instanceof Class){
-			typeName = typeName + "*"
-		} 
-			// ODER MIT
-			// typeName = generate(umlParameter.type, "name")
-			
-		
-		// Parameter hat einen ParameterDirectionKind
-		switch umlParameter.direction {
-			case ParameterDirectionKind.RETURN_LITERAL: {
-			}
-			case ParameterDirectionKind.INOUT_LITERAL: {
-				//name = generate(umlParameter, "name")
-				name = umlParameter.name
-				typeName = typeName + "*"
-			}
-			case ParameterDirectionKind.OUT_LITERAL: {
-				name = umlParameter.name
-				typeName = typeName + "*"
-			}
-			//case ParameterDirectionKind.IN_LITERAL
-			default: {
-				name = umlParameter.name
+
+		val isClassType = umlParameter.type instanceof Class
+		val isOutOrInout = umlParameter.direction == ParameterDirectionKind.OUT_LITERAL ||
+		                   umlParameter.direction == ParameterDirectionKind.INOUT_LITERAL
+
+		if (isClassType || isOutOrInout) {
+			if (!typeName.trim.endsWith("*")) {
+				typeName += "*"
 			}
 		}
 		
-		// Rückgabe der Werte
+
+		val name = if (!isReturn) umlParameter.name ?: "unnamed" else ""
+
 		if (name == "") {
 			'''«typeName»'''
 		} else {
 			'''«typeName» «name»'''
 		}
-		
 	}
 }
+	

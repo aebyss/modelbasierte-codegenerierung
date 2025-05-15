@@ -802,7 +802,8 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-
+		println("THIS IS IT")
+		println(code)
 		Assert.assertEquals('''
 			#ifndef TESTPACKAGE_TESTCLASS_H
 			#define TESTPACKAGE_TESTCLASS_H

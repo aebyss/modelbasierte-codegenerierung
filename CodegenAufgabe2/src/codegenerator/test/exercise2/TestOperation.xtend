@@ -201,7 +201,8 @@ class TestOperation {
 		]
 
 		val code = (new Uml2C).generateCode(operation, "declaration")
-
+	println("Generated code: " + code)
+	
 		Assert.assertEquals("void TestClass2_twoArgsOperation(TestClass2* const me, char arg1, int* arg2);",
 			code)
 	}
@@ -288,7 +289,7 @@ class TestOperation {
 		]
 
 		val code = (new Uml2C).generateCode(operation, "declaration")
-
+		print(code)
 		Assert.assertEquals("void TestClass_staticOperation(OtherClass* arg);", code)
 	}
 

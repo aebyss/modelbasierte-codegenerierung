@@ -13,21 +13,22 @@ class MainTemplate implements Template<Model> {
 		val instances = umlModel.allOwnedElements.filter(InstanceSpecification).filter [ i |
 			i.classifiers.size == 1 && i.classifiers.head instanceof Class && null !== (i.classifiers.head as Class).classifierBehavior
 		]
-		val includes = instances.flatMap[classifiers].filter(Class).toSet.map[cls | it.getPath(cls, "declaration")]
+		val includes = instances.flatMap[classifiers].filter(Class).toSet.map[cls | it.getPath(cls, "declaration")?.toString?.replace("\\", "/")].filterNull.toList
 
-		'''
+		'''	
 			«FOR path : includes.sort»
 				#include "«path»"
 			«ENDFOR»
 			
 			int main() {
 				«FOR inst : instances»
-					«generate((inst.classifiers.head as Class).classifierBehavior, "name")»(&«generate(inst, "name")»);
+					«it.generate((inst.classifiers.head as Class).classifierBehavior, "name")»(&«it.generate(inst, "name")»);
 				«ENDFOR»
 				
 				return 0;
 			}
 		'''
+		
 	}
 	
 	override getPath(Model object, String context) {

@@ -6,6 +6,7 @@ import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.junit.Assert;
@@ -33,6 +34,7 @@ public class TestParameter {
     };
     final Parameter parameter = ObjectExtensions.<Parameter>operator_doubleArrow(_createParameter, _function);
     final String code = new Uml2C().generateCode(parameter, "parameter");
+    InputOutput.<String>print(code);
     Assert.assertEquals("uint32 testParameter", code);
   }
 

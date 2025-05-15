@@ -12,6 +12,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.junit.Assert;
@@ -324,6 +325,7 @@ public class TestOperation {
     };
     ObjectExtensions.<org.eclipse.uml2.uml.Class>operator_doubleArrow(_createClass, _function_1);
     final String code = new Uml2C().generateCode(operation, "declaration");
+    InputOutput.<String>println(("Generated code: " + code));
     Assert.assertEquals("void TestClass2_twoArgsOperation(TestClass2* const me, char arg1, int* arg2);", code);
   }
 
@@ -453,6 +455,7 @@ public class TestOperation {
     };
     ObjectExtensions.<org.eclipse.uml2.uml.Class>operator_doubleArrow(_createClass, _function_1);
     final String code = new Uml2C().generateCode(operation, "declaration");
+    InputOutput.<String>print(code);
     Assert.assertEquals("void TestClass_staticOperation(OtherClass* arg);", code);
   }
 

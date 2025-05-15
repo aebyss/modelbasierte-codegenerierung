@@ -33,6 +33,7 @@ import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.StructuredClassifier;
 import org.eclipse.uml2.uml.Type;
@@ -99,8 +100,6 @@ public class Uml2C {
     this.<ValueSpecification>registerTemplate(_valueSpecTemplate, ValueSpecification.class, "value");
     NameTemplate _nameTemplate = new NameTemplate();
     this.<NamedElement>registerTemplate(_nameTemplate, NamedElement.class, "name");
-    OpaqueBehaviorTemplate _opaqueBehaviorTemplate = new OpaqueBehaviorTemplate();
-    this.<OpaqueBehavior>registerTemplate(_opaqueBehaviorTemplate, OpaqueBehavior.class, "behavior");
     OperationTemplate _operationTemplate = new OperationTemplate();
     this.<Operation>registerTemplate(_operationTemplate, Operation.class, "implementation");
     OperationTemplate _operationTemplate_1 = new OperationTemplate();
@@ -127,6 +126,15 @@ public class Uml2C {
     this.<ValueSpecification>registerTemplate(_valueSpecTemplate_1, ValueSpecification.class, "value");
     ValueSpecTemplate _valueSpecTemplate_2 = new ValueSpecTemplate();
     this.<InstanceValue>registerTemplate(_valueSpecTemplate_2, InstanceValue.class, "value");
+    final TypeTemplate typeTemplate = new TypeTemplate();
+    this.<Type>registerTemplate(typeTemplate, Type.class, "typename");
+    this.<org.eclipse.uml2.uml.Class>registerTemplate(typeTemplate, org.eclipse.uml2.uml.Class.class, "typename");
+    this.<PrimitiveType>registerTemplate(typeTemplate, PrimitiveType.class, "typename");
+    this.<Enumeration>registerTemplate(typeTemplate, Enumeration.class, "typename");
+    OpaqueBehaviorTemplate _opaqueBehaviorTemplate = new OpaqueBehaviorTemplate();
+    this.<OpaqueBehavior>registerTemplate(_opaqueBehaviorTemplate, OpaqueBehavior.class, "behavior");
+    OpaqueBehaviorTemplate _opaqueBehaviorTemplate_1 = new OpaqueBehaviorTemplate();
+    this.<OpaqueBehavior>registerTemplate(_opaqueBehaviorTemplate_1, OpaqueBehavior.class, "name");
   }
 
   public Uml2C() {

@@ -22,7 +22,7 @@ public class PropertyTemplate implements Template<Property> {
       Type _type = umlProperty.getType();
       boolean _tripleNotEquals = (_type != null);
       if (_tripleNotEquals) {
-        typeName = it.generate(umlProperty.getType(), "name");
+        typeName = it.generate(umlProperty.getType(), "typename");
       }
       String pointer = "";
       String upperBound = "";
