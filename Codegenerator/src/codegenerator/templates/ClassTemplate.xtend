@@ -13,7 +13,6 @@ import org.eclipse.uml2.uml.Enumeration
 import org.eclipse.uml2.uml.Dependency
 import org.eclipse.uml2.uml.Artifact
 import org.eclipse.uml2.uml.InstanceSpecification
-import org.eclipse.uml2.uml.Slot
 
 class ClassTemplate implements Template<Class> {
 
@@ -41,7 +40,7 @@ class ClassTemplate implements Template<Class> {
 				"extern " + structName + " " + modelName + "_" + inst.name + ";"
 			].join("\n")
 			val operationDecls = umlClass.ownedOperations.map[op |
-				it.generate(op, "declaration").trim
+				it.generate(op, "declaration")
 			].join("\n\n")
 			
 
@@ -72,12 +71,11 @@ class ClassTemplate implements Template<Class> {
 					.filter[it.classifiers.contains(umlClass)]
 			else emptyList
 			
-			val structName = modelName + "_" + umlClass.name
 			val headerPath = umlClass.name + ".h"
 			
 			val operationImpls = umlClass.ownedOperations.map[op |
-				it.generate(op, "implementation").trim
-			].join("\n\n").trim
+				it.generate(op, "implementation")
+			].join("\n\n")
 			
 			val instanceCode = instances.map[inst |
 				it.generateInstanceCode(modelName, umlClass, inst)
@@ -108,7 +106,6 @@ return '''
 };
 '''
 	}
-
 		val assignments = inst.slots.map[slot |
 			val attrName = slot.definingFeature?.name ?: "UNKNOWN"
 			val values = slot.values
@@ -145,7 +142,7 @@ return '''
 		val types = new HashSet<Type>()
 		
 		for (property : umlClass.ownedAttributes) {
-			if (property.type !== null && (property.type instanceof Class || property.type instanceof Enumeration)) {
+			if (property.type !== null && (property.type instanceof Class || property.type instanceof Enumeration || property.type instanceof Artifact)) {
 				types.add(property.type)
 			}
 		}
@@ -170,7 +167,12 @@ return '''
 
 		val includes = new HashSet<String>()
 		for (type : types) {
-			if (type !== null) {
+				if (type instanceof Artifact) {
+				val artifact = type as Artifact
+				val includePath = artifact.fileName
+				if (includePath !== null)
+					includes += sanitizeInclude(includePath)
+			} else {
 				includes += "#include \"" + generatePath(umlClass, type) + "\""
 			}
 		}
@@ -182,6 +184,14 @@ return '''
 		'''
 		
 	}
+	
+	def String sanitizeInclude(String path) {
+	if (path.startsWith("\"") || path.startsWith("<"))
+		return "#include " + path
+	else
+		return "#include \"" + path + "\""
+}
+	
 
 	def generatePath(CodegenInterface it, NamedElement from, NamedElement to) {
 		val fromPath = getPath(from, "declaration")

@@ -11,7 +11,10 @@ class ArtifactTemplate implements Template<Artifact> {
             case "type":
                 return artifact.name
             default:
+            
                 return "// Unknown context: " + context
         }
     }
+    
 }
+    

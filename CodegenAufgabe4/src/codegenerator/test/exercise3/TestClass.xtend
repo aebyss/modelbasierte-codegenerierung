@@ -563,7 +563,6 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "implementation")
-		print("<<<" + "\n" + code + "\n" + ">>>")
 
 		Assert.assertEquals('''
 			#include "TestClass.h"
@@ -599,7 +598,6 @@ class TestClass {
 
 		val code = (new Uml2C).generateCode(class, "implementation")
 
-		print("<<<" + "\n" + code + "\n" + ">>>")
 		Assert.assertEquals('''
 			#include "NestedClass.h"
 			
@@ -804,7 +802,6 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-		print("<<<" + code + ">>>\n")
 
 		Assert.assertEquals('''
 			#ifndef TESTPACKAGE_TESTCLASS_H

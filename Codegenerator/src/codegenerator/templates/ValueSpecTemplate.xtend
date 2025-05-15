@@ -30,7 +30,7 @@ class ValueSpecTemplate implements Template<ValueSpecification> {
 				return "NULL"
 			LiteralBoolean:
 				return if(umlLiteralSpec.booleanValue) "1" else "0"
-			InstanceValue: { //instance value added
+			InstanceValue: {
 				val instance = umlLiteralSpec.instance
 				if (instance === null) 
 					return "0"

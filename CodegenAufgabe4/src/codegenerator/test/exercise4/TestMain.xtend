@@ -18,24 +18,50 @@ class TestMain {
 		name = "MyClass"
 		classifierBehavior = behavior
 	]
+	
+	val classWithBehavior = createClass => [
+		name = "WithMain"
+		classifierBehavior = behavior
+	]
+	
+	val classWithoutBehavior = createClass => [
+		name = "NoMain"
+		// kein classifierBehavior
+	]
+		
+	val instanceGood = createInstanceSpecification => [
+		name = "goodInstance"
+		classifiers += classWithBehavior
+	]
+	
+	val instanceWrong = createInstanceSpecification => [
+		name = "badInstance"
+		classifiers += classWithoutBehavior
+	]
 
 	val inst = createInstanceSpecification => [
 		name = "inst"
 		classifiers += cls
 	]
-
+	
 	val model = createModel => [
 		name = "Model"
-		packagedElements += cls
+		packagedElements += classWithBehavior
+		packagedElements += classWithoutBehavior
+		packagedElements += instanceGood
+		packagedElements += instanceWrong
 		packagedElements += inst
 	]
 
-	val code = new Uml2C().generateCode(model, "main")
 
-	print(code)
+	val code = new Uml2C().generateCode(model, "main")
+	println("TEST main with multiple ssinstances:\n" + code)
+
 	Assert.assertTrue(code.contains("#include"))
 	Assert.assertTrue(code.contains("main(&Model_inst);"))
 	Assert.assertTrue(code.contains("int main()"))
+	Assert.assertTrue(code.contains("main(&Model_goodInstance);"))
+	Assert.assertTrue(code.contains("MyClass.h"))
 	}
 	
 

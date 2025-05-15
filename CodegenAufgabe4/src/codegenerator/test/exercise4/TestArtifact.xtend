@@ -42,7 +42,6 @@ class TestArtifact {
 				type = artifact
 			]
 		]
-		
 		Assert.assertEquals(
 			'''
 			#ifndef MYCLASS_H
@@ -72,7 +71,6 @@ class TestArtifact {
 				type = artifact
 			]
 		]
-		
 		Assert.assertEquals(
 			'''
 			#ifndef MYCLASS_H

@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.uml2.uml.Artifact;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.InstanceSpecification;
@@ -73,7 +74,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
           };
           final String externs = IterableExtensions.join(IterableExtensions.<InstanceSpecification, String>map(instances, _function_1), "\n");
           final Function1<Operation, String> _function_2 = (Operation op) -> {
-            return it.generate(op, "declaration").trim();
+            return it.generate(op, "declaration");
           };
           final String operationDecls = IterableExtensions.join(ListExtensions.<Operation, String>map(umlClass.getOwnedOperations(), _function_2), "\n\n");
           StringConcatenation _builder = new StringConcatenation();
@@ -148,13 +149,11 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
           }
           final Iterable<InstanceSpecification> instances_1 = _xifexpression_1;
           String _name_3 = umlClass.getName();
-          final String structName_1 = ((modelName_1 + "_") + _name_3);
-          String _name_4 = umlClass.getName();
-          final String headerPath = (_name_4 + ".h");
+          final String headerPath = (_name_3 + ".h");
           final Function1<Operation, String> _function_4 = (Operation op) -> {
-            return it.generate(op, "implementation").trim();
+            return it.generate(op, "implementation");
           };
-          final String operationImpls = IterableExtensions.join(ListExtensions.<Operation, String>map(umlClass.getOwnedOperations(), _function_4), "\n\n").trim();
+          final String operationImpls = IterableExtensions.join(ListExtensions.<Operation, String>map(umlClass.getOwnedOperations(), _function_4), "\n\n");
           final Function1<InstanceSpecification, String> _function_5 = (InstanceSpecification inst) -> {
             return this.generateInstanceCode(it, modelName_1, umlClass, inst);
           };
@@ -277,7 +276,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
       final HashSet<Type> types = new HashSet<Type>();
       EList<Property> _ownedAttributes = umlClass.getOwnedAttributes();
       for (final Property property : _ownedAttributes) {
-        if (((property.getType() != null) && ((property.getType() instanceof org.eclipse.uml2.uml.Class) || (property.getType() instanceof Enumeration)))) {
+        if (((property.getType() != null) && (((property.getType() instanceof org.eclipse.uml2.uml.Class) || (property.getType() instanceof Enumeration)) || (property.getType() instanceof Artifact)))) {
           types.add(property.getType());
         }
       }
@@ -299,7 +298,14 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
       }
       final HashSet<String> includes = new HashSet<String>();
       for (final Type type : types) {
-        if ((type != null)) {
+        if ((type instanceof Artifact)) {
+          final Artifact artifact = ((Artifact) type);
+          final String includePath = artifact.getFileName();
+          if ((includePath != null)) {
+            String _sanitizeInclude = this.sanitizeInclude(includePath);
+            includes.add(_sanitizeInclude);
+          }
+        } else {
           String _generatePath = this.generatePath(it, umlClass, type);
           String _plus = ("#include \"" + _generatePath);
           String _plus_1 = (_plus + "\"");
@@ -324,6 +330,14 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
       _xblockexpression = _builder.toString();
     }
     return _xblockexpression;
+  }
+
+  public String sanitizeInclude(final String path) {
+    if ((path.startsWith("\"") || path.startsWith("<"))) {
+      return ("#include " + path);
+    } else {
+      return (("#include \"" + path) + "\"");
+    }
   }
 
   public String generatePath(final CodegenInterface it, final NamedElement from, final NamedElement to) {
