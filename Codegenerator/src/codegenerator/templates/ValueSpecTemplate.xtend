@@ -15,8 +15,6 @@ import org.eclipse.uml2.uml.OpaqueExpression
 
 class ValueSpecTemplate implements Template<ValueSpecification> {
 	
-	
-
 	override generateCode(CodegenInterface it, ValueSpecification umlLiteralSpec, String context) {
 		switch umlLiteralSpec {
 			LiteralInteger:
@@ -33,6 +31,7 @@ class ValueSpecTemplate implements Template<ValueSpecification> {
 				return "NULL"
 			LiteralBoolean:
 				return if(umlLiteralSpec.booleanValue) "1" else "0"
+			//addiert für instance values
 			InstanceValue: {
 				val instance = umlLiteralSpec.instance
 				if (instance === null) 
@@ -42,6 +41,7 @@ class ValueSpecTemplate implements Template<ValueSpecification> {
 					return "0"
 				return "&" + model.name + "_" + instance.name		
 			}
+			//addiert für die RGB sachen in Model
 			OpaqueExpression: {
 				val body = umlLiteralSpec.bodies.head?.trim ?: "0"
 				return body

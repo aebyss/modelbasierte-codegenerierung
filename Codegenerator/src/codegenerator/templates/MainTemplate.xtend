@@ -14,7 +14,7 @@ class MainTemplate implements Template<Model> {
 			i.classifiers.size == 1 && i.classifiers.head instanceof Class && null !== (i.classifiers.head as Class).classifierBehavior
 		]
 		val includes = instances.flatMap[classifiers].filter(Class).toSet.map[cls | it.getPath(cls, "declaration")?.toString?.replace("\\", "/")].filterNull.toList
-
+		//addiert (void) warrning beim bauen gefixed
 		'''	
 			«FOR path : includes.sort»
 				#include "«path»"
