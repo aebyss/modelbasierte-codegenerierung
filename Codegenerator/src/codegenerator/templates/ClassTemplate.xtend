@@ -97,6 +97,18 @@ return '''
 				
 	}
 	
+	/*
+	 * dies initialisiert die instanzen attr.
+	 *   StructType instanceName = {
+	 *       .attribute1 = value1,
+	 *       .attribute2 = value2,
+	 *       ...
+	 *   };
+	 *   Falls slot hat mehrere values, eine initalisierugnsliste ist generiert mit ({..})
+	 *   falls slot keine values hat, dann die default value ist benutzt
+	 *   für single value, value ist mit value template generiert
+	 */
+	
 	def String generateInstanceCode(CodegenInterface it, String modelName, Class cls, InstanceSpecification inst) {
 	val instanceName = modelName + "_" + inst.name
 	val structName = modelName + "_" + cls.name
@@ -128,8 +140,11 @@ return '''
 };
 '''
 }
-
-
+	
+	// Erzeugt alle benötigten #include-Direktiven für eine Klasse.
+	// Geht dazu die Attributtypen, Parametertypen und Dependencies durch.
+	// Verwendet für Artefakte den fileName, für alle anderen einen berechneten Pfad.
+		
 	// //////////////////////////////////////////////////////////////////
 	// ab hier war teils schon gegeben /////////////////////////////////
 	def String generateIncludes(CodegenInterface it, Class umlClass) {
@@ -157,8 +172,6 @@ return '''
 			}
 		}
 		
-		
-
 		val includes = new HashSet<String>()
 		for (type : types) {
 				if (type instanceof Artifact) {
@@ -179,6 +192,11 @@ return '''
 		
 	}
 	
+	// Stellt sicher, dass der Include-Pfad korrekt formatiert ist.
+	// Falls schon mit " oder < beginnt, wird er direkt verwendet.
+	// Ansonsten wird der Pfad in Anführungszeichen gesetzt.
+		
+	
 	def String sanitizeInclude(String path) {
 	if (path.startsWith("\"") || path.startsWith("<"))
 		return "#include " + path
@@ -186,6 +204,11 @@ return '''
 		return "#include \"" + path + "\""
 }
 	
+	
+	// Erzeugt den relativen Pfad vom 'from'-Element zum 'to'-Element.
+	// Wird verwendet, um Include-Pfade wie "../utils/Helper.h" zu erzeugen.
+	// Nutzt dafür die getPath-Methode auf beiden Elementen.
+		
 
 	def generatePath(CodegenInterface it, NamedElement from, NamedElement to) {
 		val fromPath = getPath(from, "declaration")
@@ -199,6 +222,11 @@ return '''
 		val relPath = fromPath.parent?.relativize(toPath) ?: toPath
 		return relPath.join("/")
 	}
+	
+	// Gibt den Pfad zur Header- oder Implementierungsdatei einer Klasse zurück.
+	// Baut den Pfad anhand des Namespaces und des Klassennamens zusammen.
+	// Bei "declaration" endet der Pfad auf .h, bei "implementation" auf .c.
+		
 
 	override Path getPath(Class umlClass, String context) {
 		var path = new LinkedList<String>()
