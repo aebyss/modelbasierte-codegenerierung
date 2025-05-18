@@ -10,9 +10,12 @@ import org.eclipse.uml2.uml.LiteralString
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural
 import org.eclipse.uml2.uml.ValueSpecification
 import org.eclipse.uml2.uml.InstanceValue
+import org.eclipse.uml2.uml.OpaqueExpression
 
 
 class ValueSpecTemplate implements Template<ValueSpecification> {
+	
+	
 
 	override generateCode(CodegenInterface it, ValueSpecification umlLiteralSpec, String context) {
 		switch umlLiteralSpec {
@@ -34,15 +37,18 @@ class ValueSpecTemplate implements Template<ValueSpecification> {
 				val instance = umlLiteralSpec.instance
 				if (instance === null) 
 					return "0"
-					
 				val model = instance.model
 				if (model === null) 
 					return "0"
 				return "&" + model.name + "_" + instance.name		
 			}
+			OpaqueExpression: {
+				val body = umlLiteralSpec.bodies.head?.trim ?: "0"
+				return body
+}
 		}
-
-		return umlLiteralSpec.stringValue
+		
+		return "// unsupported value type: " + umlLiteralSpec.class.name
 	}
 
 }

@@ -37,7 +37,8 @@ import org.eclipse.uml2.uml.ValueSpecification
 import codegenerator.templates.MainTemplate
 import org.eclipse.uml2.uml.InstanceValue
 import org.eclipse.uml2.uml.ValueSpecification
-
+import org.eclipse.uml2.uml.OpaqueExpression
+import codegenerator.templates.OpaqueExpressionTemplate
 
 /**
  * Code generator that takes UML Elements and generates C code from them.
@@ -106,6 +107,8 @@ class Uml2C {
 		registerTemplate(typeTemplate, typeof(Enumeration), "typename")
 		registerTemplate(new OpaqueBehaviorTemplate(), typeof(OpaqueBehavior), "behavior")
 		registerTemplate(new OpaqueBehaviorTemplate(), typeof(OpaqueBehavior), "name")
+		registerTemplate(new OpaqueExpressionTemplate(), typeof(OpaqueExpression), "value")
+		
 		
 	}
 	new() {

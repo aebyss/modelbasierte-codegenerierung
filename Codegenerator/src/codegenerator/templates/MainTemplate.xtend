@@ -20,7 +20,7 @@ class MainTemplate implements Template<Model> {
 				#include "«path»"
 			«ENDFOR»
 			
-			int main() {
+			int main(void) {
 				«FOR inst : instances»
 					«it.generate((inst.classifiers.head as Class).classifierBehavior, "name")»(&«it.generate(inst, "name")»);
 				«ENDFOR»
