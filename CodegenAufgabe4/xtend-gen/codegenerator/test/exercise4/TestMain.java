@@ -62,7 +62,8 @@ public class TestMain {
     final Uml2C generator = new Uml2C();
     final String code = generator.generateCode(model, "main");
     InputOutput.<String>println(("--- Generierter main.c ---\n" + code));
-    final String includeLine = "#include \"Game.h\"";
+    final String includeLine = "#include \"Model/Game.h\"";
+    InputOutput.<String>println(("Include" + includeLine));
     StringConcatenation _builder = new StringConcatenation();
     _builder.append(includeLine);
     _builder.newLineIfNotEmpty();
@@ -77,7 +78,7 @@ public class TestMain {
     _builder.newLine();
     _builder.append("}");
     _builder.newLine();
-    final String expected = _builder.toString().trim();
+    final String expected = _builder.toString();
     final String actual = code;
     Assert.assertEquals(expected, actual);
   }
@@ -152,15 +153,16 @@ public class TestMain {
     final Model model = ObjectExtensions.<Model>operator_doubleArrow(_createModel, _function_3);
     final Uml2C generator = new Uml2C();
     final String code = generator.generateCode(model, "main");
+    final String includeLine = "#include \"Model/Helper.h\"";
     InputOutput.<String>println(("--- Fallback-Fall ---\n" + code));
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("#include \"Helper.h\"");
-    _builder.newLine();
+    _builder.append(includeLine);
+    _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("int main(void) {");
     _builder.newLine();
     _builder.append("\t");
-    _builder.append("Helper_do_something(&Model_helperInstance);");
+    _builder.append("Model_Helper_do_something(&Model_helperInstance);");
     _builder.newLine();
     _builder.append("\t");
     _builder.append("return 0;");

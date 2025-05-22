@@ -31,7 +31,8 @@ class TestMain {
         val code = generator.generateCode(model, "main")
         println("--- Generierter main.c ---\n" + code)
 
-        val includeLine = "#include \"Game.h\""
+        val includeLine = "#include \"Model/Game.h\""
+        println("Include" + includeLine)
         val expected = '''
 			«includeLine»
 
@@ -39,7 +40,7 @@ class TestMain {
 				Model_Game_start(&Model_gameInstance);
 				return 0;
 			}
-		'''.toString.trim
+		'''.toString
 
         val actual = code
 
@@ -91,13 +92,14 @@ class TestMain {
 
         val generator = new Uml2C()
         val code = generator.generateCode(model, "main")
+        val includeLine = "#include \"Model/Helper.h\""
         println("--- Fallback-Fall ---\n" + code)
 
         val expected = '''
-			#include "Helper.h"
+			«includeLine»
 
 			int main(void) {
-				Helper_do_something(&Model_helperInstance);
+				Model_Helper_do_something(&Model_helperInstance);
 				return 0;
 			}
 		'''.toString
