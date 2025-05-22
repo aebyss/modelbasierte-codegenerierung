@@ -2,8 +2,8 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
+import com.google.common.base.Objects;
 import java.util.LinkedList;
-import java.util.Objects;
 import org.eclipse.uml2.uml.Artifact;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Namespace;
@@ -61,7 +61,7 @@ public class TypeTemplate implements Template<Type> {
         if (umlType instanceof Artifact) {
           _matched=true;
           final String name = ((Artifact)umlType).getName();
-          if (((!Objects.equals(name, null)) && name.endsWith(".h"))) {
+          if (((!Objects.equal(name, null)) && name.endsWith(".h"))) {
             return name.replace(".h", "");
           } else {
             String _elvis = null;

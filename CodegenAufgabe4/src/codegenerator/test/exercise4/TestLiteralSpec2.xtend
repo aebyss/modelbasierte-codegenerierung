@@ -9,7 +9,10 @@ class TestLiteralSpec2 {
 	
 	extension UMLFactory factory = UMLFactory.eINSTANCE
 
-	@Test def testEmptyInstanceValue() {
+	/*
+	 * Eine InstanceValue ohne instance ist ein nullpointer und wird als 0 generiert.
+	 */
+	@Test def test00_EmptyInstanceValue() {
 
 		val literal = createInstanceValue
 
@@ -18,7 +21,10 @@ class TestLiteralSpec2 {
 		Assert.assertEquals("0", code)
 	}
 
-	@Test def testInstanceValue() {
+	/*
+	 * Eine InstanceValue mit instance nimmt die Adresse des Objekts.
+	 */
+	@Test def test01_InstanceValue() {
 
 		val class = createClass => [name = "TestClass"]
 		val inst = createInstanceSpecification => [

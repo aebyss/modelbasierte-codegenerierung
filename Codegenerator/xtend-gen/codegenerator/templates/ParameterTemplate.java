@@ -2,7 +2,7 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
-import java.util.Objects;
+import com.google.common.base.Objects;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Type;
@@ -16,11 +16,11 @@ public class ParameterTemplate implements Template<Parameter> {
   public String generateCode(final CodegenInterface it, final Parameter umlParameter, final String context) {
     String _xblockexpression = null;
     {
-      final boolean isReturn = Objects.equals(context, "return");
+      final boolean isReturn = Objects.equal(context, "return");
       ParameterDirectionKind _direction = umlParameter.getDirection();
-      final boolean isInout = Objects.equals(_direction, ParameterDirectionKind.INOUT_LITERAL);
+      final boolean isInout = Objects.equal(_direction, ParameterDirectionKind.INOUT_LITERAL);
       ParameterDirectionKind _direction_1 = umlParameter.getDirection();
-      final boolean isOut = Objects.equals(_direction_1, ParameterDirectionKind.OUT_LITERAL);
+      final boolean isOut = Objects.equal(_direction_1, ParameterDirectionKind.OUT_LITERAL);
       Type _type = umlParameter.getType();
       final boolean isClass = (_type instanceof org.eclipse.uml2.uml.Class);
       String _xifexpression = null;
@@ -43,8 +43,8 @@ public class ParameterTemplate implements Template<Parameter> {
       }
       Type _type_2 = umlParameter.getType();
       final boolean isClassType = (_type_2 instanceof org.eclipse.uml2.uml.Class);
-      final boolean isOutOrInout = (Objects.equals(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL) || 
-        Objects.equals(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL));
+      final boolean isOutOrInout = (Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.OUT_LITERAL) || 
+        Objects.equal(umlParameter.getDirection(), ParameterDirectionKind.INOUT_LITERAL));
       if ((isClassType || isOutOrInout)) {
         boolean _endsWith = typeName.trim().endsWith("*");
         boolean _not = (!_endsWith);
@@ -68,7 +68,7 @@ public class ParameterTemplate implements Template<Parameter> {
       }
       final String name = _xifexpression_1;
       String _xifexpression_2 = null;
-      boolean _equals = Objects.equals(name, "");
+      boolean _equals = Objects.equal(name, "");
       if (_equals) {
         StringConcatenation _builder = new StringConcatenation();
         _builder.append(typeName);

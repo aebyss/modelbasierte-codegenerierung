@@ -51,7 +51,7 @@ public class MainTemplate implements Template<Model> {
         }
       }
       _builder.newLine();
-      _builder.append("int main() {");
+      _builder.append("int main(void) {");
       _builder.newLine();
       {
         for(final InstanceSpecification inst : instances) {

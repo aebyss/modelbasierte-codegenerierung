@@ -36,8 +36,8 @@ void Duhm_Controls_process_inputs(Duhm_Controls* const me, float dt) {
 	{
 	    const float deadzone = 0.1f;
 	    
-	    float joy_y = (float)joy_vals[0] / (float)ADC_MAX_VAL - 0.5f;
-	    float joy_x = (float)joy_vals[1] / (float)ADC_MAX_VAL - 0.5f;
+	    float joy_y = (float)joy_vals[1] / (float)ADC_MAX_VAL - 0.5f;
+	    float joy_x = (float)joy_vals[0] / (float)ADC_MAX_VAL - 0.5f;
 	    float move_x = 0.0f;
 	    float move_y = 0.0f;
 	

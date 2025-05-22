@@ -11,7 +11,9 @@ import org.eclipse.uml2.uml.LiteralReal;
 import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.LiteralUnlimitedNatural;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.OpaqueExpression;
 import org.eclipse.uml2.uml.ValueSpecification;
+import org.eclipse.xtext.xbase.lib.IterableExtensions;
 
 @SuppressWarnings("all")
 public class ValueSpecTemplate implements Template<ValueSpecification> {
@@ -87,6 +89,25 @@ public class ValueSpecTemplate implements Template<ValueSpecification> {
         return (_plus_1 + _name_1);
       }
     }
-    return umlLiteralSpec.stringValue();
+    if (!_matched) {
+      if (umlLiteralSpec instanceof OpaqueExpression) {
+        _matched=true;
+        String _elvis = null;
+        String _head = IterableExtensions.<String>head(((OpaqueExpression)umlLiteralSpec).getBodies());
+        String _trim = null;
+        if (_head!=null) {
+          _trim=_head.trim();
+        }
+        if (_trim != null) {
+          _elvis = _trim;
+        } else {
+          _elvis = "0";
+        }
+        final String body = _elvis;
+        return body;
+      }
+    }
+    String _name = umlLiteralSpec.getClass().getName();
+    return ("// unsupported value type: " + _name);
   }
 }

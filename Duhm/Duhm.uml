@@ -35,7 +35,7 @@
       <nestedArtifact xmi:type="uml:Artifact" xmi:id="__YNCMMqyEeyo0KHhgKsGiQ" name="uint16_t" fileName="&lt;stdint.h>"/>
       <nestedArtifact xmi:type="uml:Artifact" xmi:id="_AQvzwMqzEeyo0KHhgKsGiQ" name="uint8_t" fileName="&lt;stdint.h>"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Artifact" xmi:id="_ABk54Mq0Eeyo0KHhgKsGiQ" name="TM4C123.h" fileName="&lt;TM4C123.h>"/>
+    <packagedElement xmi:type="uml:Artifact" xmi:id="_ABk54Mq0Eeyo0KHhgKsGiQ" name="TM4C123GH6PM.h" fileName="&lt;TM4C123GH6PM.h>"/>
     <packagedElement xmi:type="uml:Artifact" xmi:id="_pA4WsMq5Eeyo0KHhgKsGiQ" name="color.h" fileName="&lt;color.h>">
       <nestedArtifact xmi:type="uml:Artifact" xmi:id="_1OP2AMq6Eeyo0KHhgKsGiQ" name="color_t" fileName="&lt;color.h>"/>
     </packagedElement>
@@ -1229,19 +1229,19 @@ if (0.01f &lt; obj->pos[2]) {&#xD;
     <slot xmi:type="uml:Slot" xmi:id="_sQLAkMriEeyo0KHhgKsGiQ" definingFeature="_A84pkMrKEeyo0KHhgKsGiQ">
       <value xmi:type="uml:OpaqueExpression" xmi:id="_zFJpcMrkEeyo0KHhgKsGiQ">
         <language>C</language>
-        <body>RGB565(0xC1, 0xF0, 0xFC)</body>
+        <body>{0xC79F}</body>
       </value>
     </slot>
     <slot xmi:type="uml:Slot" xmi:id="_sr8WkMriEeyo0KHhgKsGiQ" definingFeature="_Cw16gMrKEeyo0KHhgKsGiQ">
       <value xmi:type="uml:OpaqueExpression" xmi:id="_3H3Q8MrkEeyo0KHhgKsGiQ">
         <language>C</language>
-        <body>RGB565(0x95, 0xE6, 0x32)</body>
+        <body>{0x9726}</body>
       </value>
     </slot>
     <slot xmi:type="uml:Slot" xmi:id="_tOEzQMriEeyo0KHhgKsGiQ" definingFeature="_EhlfYMrKEeyo0KHhgKsGiQ">
       <value xmi:type="uml:OpaqueExpression" xmi:id="_SaH5gMrrEeyo0KHhgKsGiQ">
         <language>C</language>
-        <body>RGB565(0xDA, 0xF7, 0xFC)</body>
+        <body>{0xDFBF}</body>
       </value>
     </slot>
     <slot xmi:type="uml:Slot" xmi:id="_xRPtwMriEeyo0KHhgKsGiQ" definingFeature="_9BubkMrJEeyo0KHhgKsGiQ">
@@ -1313,8 +1313,8 @@ int strafe = !gpio_get(PORTD, PIN6);&#xD;
 {&#xD;
     const float deadzone = 0.1f;&#xD;
     &#xD;
-    float joy_y = (float)joy_vals[0] / (float)ADC_MAX_VAL - 0.5f;&#xD;
-    float joy_x = (float)joy_vals[1] / (float)ADC_MAX_VAL - 0.5f;&#xD;
+    float joy_y = (float)joy_vals[1] / (float)ADC_MAX_VAL - 0.5f;&#xD;
+    float joy_x = (float)joy_vals[0] / (float)ADC_MAX_VAL - 0.5f;&#xD;
     float move_x = 0.0f;&#xD;
     float move_y = 0.0f;&#xD;
 &#xD;

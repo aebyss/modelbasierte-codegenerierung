@@ -2,7 +2,7 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
-import java.util.Objects;
+import com.google.common.base.Objects;
 import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Property;
@@ -37,7 +37,7 @@ public class PropertyTemplate implements Template<Property> {
         }
       }
       AggregationKind _aggregation = umlProperty.getAggregation();
-      boolean _equals = Objects.equals(_aggregation, AggregationKind.COMPOSITE_LITERAL);
+      boolean _equals = Objects.equal(_aggregation, AggregationKind.COMPOSITE_LITERAL);
       if (_equals) {
         pointer = "";
       } else {

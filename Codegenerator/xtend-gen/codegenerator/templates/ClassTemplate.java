@@ -2,13 +2,13 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Artifact;
 import org.eclipse.uml2.uml.Dependency;
@@ -187,6 +187,17 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
     return null;
   }
 
+  /**
+   * dies initialisiert die instanzen attr.
+   *   StructType instanceName = {
+   *       .attribute1 = value1,
+   *       .attribute2 = value2,
+   *       ...
+   *   };
+   *   Falls slot hat mehrere values, eine initalisierugnsliste ist generiert mit ({..})
+   *   falls slot keine values hat, dann die default value ist benutzt
+   *   für single value, value ist mit value template generiert
+   */
   public String generateInstanceCode(final CodegenInterface it, final String modelName, final org.eclipse.uml2.uml.Class cls, final InstanceSpecification inst) {
     String _name = inst.getName();
     final String instanceName = ((modelName + "_") + _name);
@@ -238,7 +249,7 @@ public class ClassTemplate implements Template<org.eclipse.uml2.uml.Class> {
           _xifexpression = _builder_1.toString();
         } else {
           String _xifexpression_1 = null;
-          if ((values.isEmpty() || Objects.equals(IterableExtensions.<ValueSpecification>head(values), null))) {
+          if ((values.isEmpty() || Objects.equal(IterableExtensions.<ValueSpecification>head(values), null))) {
             _xifexpression_1 = "0";
           } else {
             _xifexpression_1 = it.generate(IterableExtensions.<ValueSpecification>head(values), "value");

@@ -8,6 +8,7 @@ import codegenerator.templates.MainTemplate;
 import codegenerator.templates.NameTemplate;
 import codegenerator.templates.NullTemplate;
 import codegenerator.templates.OpaqueBehaviorTemplate;
+import codegenerator.templates.OpaqueExpressionTemplate;
 import codegenerator.templates.OperationTemplate;
 import codegenerator.templates.ParameterTemplate;
 import codegenerator.templates.PropertyTemplate;
@@ -31,6 +32,7 @@ import org.eclipse.uml2.uml.InstanceValue;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
+import org.eclipse.uml2.uml.OpaqueExpression;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.PrimitiveType;
@@ -135,6 +137,8 @@ public class Uml2C {
     this.<OpaqueBehavior>registerTemplate(_opaqueBehaviorTemplate, OpaqueBehavior.class, "behavior");
     OpaqueBehaviorTemplate _opaqueBehaviorTemplate_1 = new OpaqueBehaviorTemplate();
     this.<OpaqueBehavior>registerTemplate(_opaqueBehaviorTemplate_1, OpaqueBehavior.class, "name");
+    OpaqueExpressionTemplate _opaqueExpressionTemplate = new OpaqueExpressionTemplate();
+    this.<OpaqueExpression>registerTemplate(_opaqueExpressionTemplate, OpaqueExpression.class, "value");
   }
 
   public Uml2C() {

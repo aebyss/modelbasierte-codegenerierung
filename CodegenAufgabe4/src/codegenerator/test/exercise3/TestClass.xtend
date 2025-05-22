@@ -11,9 +11,9 @@ class TestClass {
 	extension UMLFactory factory = UMLFactory.eINSTANCE
 
 	/**
-	 * 
+	 * Eine Header-Datei für eine Klasse enthält immer Header-Guards und ein struct.
 	 */
-	@Test def testEmptyClassHeader() {
+	@Test def test00_EmptyClassHeader() {
 		val class = createClass => [
 			name = "TestClass"
 		]
@@ -32,9 +32,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test mit anderem Name.
 	 */
-	@Test def testEmptyClassHeader2() {
+	@Test def test01_EmptyClassHeader2() {
 		val class = createClass => [
 			name = "Klasse"
 		]
@@ -53,9 +53,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Attribute der Klasse werden im Struct gelistet.
 	 */
-	@Test def testClassHeaderWithProperties() {
+	@Test def test02_ClassHeaderWithProperties() {
 		val class = createClass => [
 			name = "Vec2"
 			ownedAttributes += createProperty => [
@@ -69,8 +69,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-		print("test_class_withproperties\n")
-		print(code)
+
 		Assert.assertEquals('''
 			#ifndef VEC2_H
 			#define VEC2_H
@@ -85,9 +84,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Für alle Operationen der Klasse werden im header die Signaturen aufgeführt.
 	 */
-	@Test def testClassHeaderWithPropertyAndOperation() {
+	@Test def test03_ClassHeaderWithPropertyAndOperation() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -105,8 +104,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-		print("Headerwthpropertyand operation\n")
-		print(code)
+
 		Assert.assertEquals('''
 			#ifndef TESTCLASS_H
 			#define TESTCLASS_H
@@ -122,9 +120,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassHeaderWithPropertyAndOperation2() {
+	@Test def test04_ClassHeaderWithPropertyAndOperation2() {
 		val int_t = createPrimitiveType => [name = "int"]
 		val uint8_t = createPrimitiveType => [name = "uint8_t"]
 		val class = createClass => [
@@ -176,7 +174,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-		print("<<i<" + "\n" + code + "\n" + ">>>")
+
 		Assert.assertEquals('''
 			#ifndef WORLD_H
 			#define WORLD_H
@@ -194,9 +192,10 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Eine C-Datei einer Klasse importiert immer die dazugehörige H-Datei.
+	 * Für alle Operationen der Klasse werden die Implementationen gelistet.
 	 */
-	@Test def testClassImplementationWithPropertyAndOperation() {
+	@Test def test05_ClassImplementationWithPropertyAndOperation() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -226,9 +225,9 @@ class TestClass {
 
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassImplementationWithPropertyAndOperation2() {
+	@Test def test06_ClassImplementationWithPropertyAndOperation2() {
 		val int_t = createPrimitiveType => [name = "int"]
 		val uint8_t = createPrimitiveType => [name = "uint8_t"]
 		val class = createClass => [
@@ -295,9 +294,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * For Properties mit einem nicht-primitiven Type soll der Type included werden.
 	 */
-	@Test def testClassHeaderWithIncludeFromProperty() {
+	@Test def test07_ClassHeaderWithIncludeFromProperty() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -323,9 +322,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassHeaderWithIncludeFromProperty2() {
+	@Test def test08_ClassHeaderWithIncludeFromProperty2() {
 		val class = createClass => [
 			name = "Object"
 			ownedAttributes += createProperty => [
@@ -351,9 +350,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Auch für nicht-primitive Parameter sollen includes generiert werden.
 	 */
-	@Test def testClassHeaderWithIncludeFromParameter() {
+	@Test def test09_ClassHeaderWithIncludeFromParameter() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -392,9 +391,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassHeaderWithIncludeFromParameter2() {
+	@Test def test10_ClassHeaderWithIncludeFromParameter2() {
 		val int_t = createPrimitiveType => [name = "int"]
 		val class = createClass => [
 			name = "Texture"
@@ -461,9 +460,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Für Klassen in einem Namespace muss der Name des Namespace an den korrekten Stellen eingefügt werden.
 	 */
-	@Test def testClassHeaderInNamespace() {
+	@Test def test11_ClassHeaderInNamespace() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -501,9 +500,9 @@ class TestClass {
 
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassHeaderInNamespace2() {
+	@Test def test12_ClassHeaderInNamespace2() {
 		val class = createClass => [
 			name = "NestedClass"
 			ownedAttributes += createProperty => [
@@ -540,9 +539,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test, aber C-Datei statt H-Datei.
 	 */
-	@Test def testClassImplementationInNamespace() {
+	@Test def test13_ClassImplementationInNamespace() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -574,9 +573,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassImplementationInNamespace2() {
+	@Test def test14_ClassImplementationInNamespace2() {
 		val class = createClass => [
 			name = "NestedClass"
 			ownedAttributes += createProperty => [
@@ -608,9 +607,9 @@ class TestClass {
 	}
 	
 	/**
-	 * 
+	 * Includes müssen den Pfad zur includeten Datei korrekt auflösen.
 	 */
-	@Test def testClassHeaderWithIncludeInOtherNamespace() {
+	@Test def test15_ClassHeaderWithIncludeInOtherNamespace() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -653,9 +652,9 @@ class TestClass {
 	}
 	
 	/**
-	 * 
+	 * Gleicher Test mit anderen Namen.
 	 */
-	@Test def testClassHeaderWithIncludeInOtherNamespace2() {
+	@Test def test16_ClassHeaderWithIncludeInOtherNamespace2() {
 		val otherClass = createClass => [name = "OtherClass"]
 		
 		createPackage => [
@@ -719,9 +718,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Include einer Klasse im selben Namespace.
 	 */
-	@Test def testClassHeaderWithIncludeInSameNamespace() {
+	@Test def test17_ClassHeaderWithIncludeInSameNamespace() {
 		val otherClass = createClass => [name = "OtherClass"]
 		
 		val class = createClass => [
@@ -768,9 +767,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Weiterer Test für relative include-Pfade.
 	 */
-	@Test def testClassHeaderWithIncludeInDeeperNamespace() {
+	@Test def test18_ClassHeaderWithIncludeInDeeperNamespace() {
 		val otherClass = createClass => [name = "OtherClass"]
 		
 		val class = createClass => [
@@ -802,8 +801,7 @@ class TestClass {
 		]
 
 		val code = (new Uml2C).generateCode(class, "declaration")
-		println("THIS IS IT")
-		println(code)
+
 		Assert.assertEquals('''
 			#ifndef TESTPACKAGE_TESTCLASS_H
 			#define TESTPACKAGE_TESTCLASS_H
@@ -821,9 +819,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Namespaces können beliebig tief geschachtelt sein.
 	 */
-	@Test def testClassHeaderWithMapyIncludes() {		
+	@Test def test19_ClassHeaderWithMapyIncludes() {
 		val class = createClass => [
 			name = "MainClass"
 			ownedAttributes += createProperty => [
@@ -879,9 +877,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Nicht nur Klassen, auch Enumerationen müssen included werden.
 	 */
-	@Test def testClassHeaderWithEnumIncludeFromProperty() {
+	@Test def test20_ClassHeaderWithEnumIncludeFromProperty() {
 		val class = createClass => [
 			name = "TestClass"
 			ownedAttributes += createProperty => [
@@ -907,9 +905,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Auch Enums können in in anderen Namespaces liegen.
 	 */
-	@Test def testClassHeaderWithEnumInOtherNamespaceIncludeFromProperty() {
+	@Test def test21_ClassHeaderWithEnumInOtherNamespaceIncludeFromProperty() {
 		val enu = createEnumeration => [name = "AnEnum"]
 		val class = createClass => [
 			name = "TestClass"
@@ -947,9 +945,10 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Dependencies können verwendet werden um includes zu erzeugen, auch wenn der Type nicht in einem Paramete roder Property auftaucht der Klasse.
+	 * Tip: umlClass.relationships.filter(Dependency)
 	 */
-	@Test def testClassHeaderWithDependencyInclude() {
+	@Test def test22_ClassHeaderWithDependencyInclude() {
 		val otherClass = createClass => [
 			name = "OtherClass"
 		]
@@ -984,9 +983,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Includes durch Dependencies müssen auch relative Pfade erzeugen.
 	 */
-	@Test def testClassHeaderWithDependencyInOtherNamespaceInclude() {
+	@Test def test23_ClassHeaderWithDependencyInOtherNamespaceInclude() {
 		val otherClass = createClass => [
 			name = "OtherClass"
 		]
@@ -1037,9 +1036,9 @@ class TestClass {
 	}
 
 	/**
-	 * 
+	 * Includes in einer H-Datei sollen alphabetisch sortiert sein.
 	 */
-	@Test def testClassHeaderWithSortedIncludes() {
+	@Test def test24_ClassHeaderWithSortedIncludes() {
 		val d = createClass => [name = "D"]
 		val b = createClass => [name = "B"]
 		val a = createClass => [name = "A"]

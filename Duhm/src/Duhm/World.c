@@ -43,9 +43,9 @@ int32_t Duhm_World_raycast(Duhm_World* const me, float pos_x, float pos_y, float
 Duhm_World Duhm_world = {
 	.width = world_width,
 	.height = world_height,
-	.sky_color = RGB565(0xC1, 0xF0, 0xFC),
-	.floor_color = RGB565(0x95, 0xE6, 0x32),
-	.fog_color = RGB565(0xDA, 0xF7, 0xFC),
+	.sky_color = {0xC79F},
+	.floor_color = {0x9726},
+	.fog_color = {0xDFBF},
 	.ceil_height = 1.0,
 	.floor_height = 0.0,
 	.cells = world_data,
