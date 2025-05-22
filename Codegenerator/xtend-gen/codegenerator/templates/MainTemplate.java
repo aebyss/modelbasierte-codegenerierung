@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.uml2.uml.Behavior;
+import org.eclipse.uml2.uml.BehavioralFeature;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.InstanceSpecification;
 import org.eclipse.uml2.uml.Model;
@@ -57,17 +59,36 @@ public class MainTemplate implements Template<Model> {
         for(final InstanceSpecification inst : instances) {
           _builder.append("\t");
           Classifier _head = IterableExtensions.<Classifier>head(inst.getClassifiers());
-          String _generate = it.generate(((org.eclipse.uml2.uml.Class) _head).getClassifierBehavior(), "name");
-          _builder.append(_generate, "\t");
+          final org.eclipse.uml2.uml.Class cls = ((org.eclipse.uml2.uml.Class) _head);
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          final Behavior behavior = cls.getClassifierBehavior();
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          BehavioralFeature _specification = null;
+          if (behavior!=null) {
+            _specification=behavior.getSpecification();
+          }
+          final BehavioralFeature operation = _specification;
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          String _xifexpression = null;
+          if ((operation != null)) {
+            _xifexpression = it.generate(operation, "name");
+          } else {
+            _xifexpression = it.generate(behavior, "name");
+          }
+          final String funcName = _xifexpression;
+          _builder.newLineIfNotEmpty();
+          _builder.append("\t");
+          _builder.append(funcName, "\t");
           _builder.append("(&");
-          String _generate_1 = it.generate(inst, "name");
-          _builder.append(_generate_1, "\t");
+          String _generate = it.generate(inst, "name");
+          _builder.append(_generate, "\t");
           _builder.append(");");
           _builder.newLineIfNotEmpty();
         }
       }
-      _builder.append("\t");
-      _builder.newLine();
       _builder.append("\t");
       _builder.append("return 0;");
       _builder.newLine();

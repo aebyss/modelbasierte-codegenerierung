@@ -7,62 +7,103 @@ import org.junit.Test
 
 class TestMain {
 
-	extension UMLFactory factory = UMLFactory.eINSTANCE
-	
-	@Test def void testMain() {
-	val behavior = createOpaqueBehavior => [
-		name = "main"
-	]
+    extension UMLFactory factory = UMLFactory.eINSTANCE
 
-	val cls = createClass => [
-		name = "MyClass"
-		classifierBehavior = behavior
-	]
-	
-	val classWithBehavior = createClass => [
-		name = "WithMain"
-		classifierBehavior = behavior
-	]
-	
-	val classWithoutBehavior = createClass => [
-		name = "NoMain"
-		// kein classifierBehavior
-	]
-		
-	val instanceGood = createInstanceSpecification => [
-		name = "goodInstance"
-		classifiers += classWithBehavior
-	]
-	
-	val instanceWrong = createInstanceSpecification => [
-		name = "badInstance"
-		classifiers += classWithoutBehavior
-	]
+    @Test def void testMainGeneratingWithValidBehavior() {
+        val op = createOperation => [ name = "start" ]
+        val behavior = createOpaqueBehavior => [ name = "start_impl"; specification = op ]
+        val cls = createClass => [
+            name = "Game"
+            classifierBehavior = behavior
+            ownedOperations += op
+        ]
+        val inst = createInstanceSpecification => [
+            name = "gameInstance"
+            classifiers += cls
+        ]
+        val model = createModel => [
+            name = "Model"
+            packagedElements += cls
+            packagedElements += inst
+        ]
 
-	val inst = createInstanceSpecification => [
-		name = "inst"
-		classifiers += cls
-	]
-	
-	val model = createModel => [
-		name = "Model"
-		packagedElements += classWithBehavior
-		packagedElements += classWithoutBehavior
-		packagedElements += instanceGood
-		packagedElements += instanceWrong
-		packagedElements += inst
-	]
+        val generator = new Uml2C()
+        val code = generator.generateCode(model, "main")
+        println("--- Generierter main.c ---\n" + code)
 
+        val includeLine = "#include \"Game.h\""
+        val expected = '''
+			«includeLine»
 
-	val code = new Uml2C().generateCode(model, "main")
-	println("TEST main with multiple ssinstances:\n" + code)
+			int main(void) {
+				Model_Game_start(&Model_gameInstance);
+				return 0;
+			}
+		'''.toString.trim
 
-	Assert.assertTrue(code.contains("#include"))
-	Assert.assertTrue(code.contains("main(&Model_inst);"))
-	Assert.assertTrue(code.contains("int main()"))
-	Assert.assertTrue(code.contains("main(&Model_goodInstance);"))
-	Assert.assertTrue(code.contains("MyClass.h"))
-	}
-	
+        val actual = code
 
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test def void testMainIgnoresInstanceWithoutBehavior() {
+        val cls = createClass => [ name = "NoBehavior" ]
+        val inst = createInstanceSpecification => [
+            name = "ignored"
+            classifiers += cls
+        ]
+        val model = createModel => [
+            name = "Model"
+            packagedElements += cls
+            packagedElements += inst
+        ]
+
+        val generator = new Uml2C()
+        val code = generator.generateCode(model, "main")
+        println("--- Generierter Code (ohne Behavior) ---\n" + code)
+
+        // Nur main-Funktion mit return
+        val expected = '''
+			int main(void) {
+				return 0;
+			}
+		'''.toString
+
+        val actual = code
+        Assert.assertTrue(actual.contains(expected)) // Kein include – keine Instanz verarbeitet
+    }
+
+    @Test def void testFallbackOnBehaviorNameIfNoOperation() {
+        val behavior = createOpaqueBehavior => [ name = "do_something" ]
+        val cls = createClass => [
+            name = "Helper"
+            classifierBehavior = behavior
+        ]
+        val inst = createInstanceSpecification => [
+            name = "helperInstance"
+            classifiers += cls
+        ]
+        val model = createModel => [
+            name = "Model"
+            packagedElements += cls
+            packagedElements += inst
+        ]
+
+        val generator = new Uml2C()
+        val code = generator.generateCode(model, "main")
+        println("--- Fallback-Fall ---\n" + code)
+
+        val expected = '''
+			#include "Helper.h"
+
+			int main(void) {
+				Helper_do_something(&Model_helperInstance);
+				return 0;
+			}
+		'''.toString
+
+        val actual = code
+
+        Assert.assertEquals(expected, actual)
+    }
 }

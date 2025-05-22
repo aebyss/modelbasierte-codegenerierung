@@ -2,10 +2,10 @@ package codegenerator.templates;
 
 import codegenerator.CodegenInterface;
 import codegenerator.Template;
-import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.OpaqueBehavior;
 import org.eclipse.uml2.uml.Operation;
@@ -34,7 +34,7 @@ public class OperationTemplate implements Template<Operation> {
       final boolean isStatic = umlOperation.isStatic();
       final Function1<Parameter, Boolean> _function = (Parameter it_1) -> {
         ParameterDirectionKind _direction = it_1.getDirection();
-        return Boolean.valueOf(Objects.equal(_direction, ParameterDirectionKind.RETURN_LITERAL));
+        return Boolean.valueOf(Objects.equals(_direction, ParameterDirectionKind.RETURN_LITERAL));
       };
       final Parameter returnParam = IterableExtensions.<Parameter>findFirst(umlOperation.getOwnedParameters(), _function);
       String _xifexpression_1 = null;
@@ -45,7 +45,7 @@ public class OperationTemplate implements Template<Operation> {
       }
       final String returnType = _xifexpression_1;
       final Function1<Parameter, Boolean> _function_1 = (Parameter it_1) -> {
-        return Boolean.valueOf(((it_1.getDirection() == null) || (!Objects.equal(it_1.getDirection(), ParameterDirectionKind.RETURN_LITERAL))));
+        return Boolean.valueOf(((it_1.getDirection() == null) || (!Objects.equals(it_1.getDirection(), ParameterDirectionKind.RETURN_LITERAL))));
       };
       final Iterable<Parameter> nonReturnParams = IterableExtensions.<Parameter>filter(umlOperation.getOwnedParameters(), _function_1);
       final Function1<Parameter, String> _function_2 = (Parameter p) -> {

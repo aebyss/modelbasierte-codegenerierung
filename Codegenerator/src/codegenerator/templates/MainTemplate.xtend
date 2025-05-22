@@ -22,9 +22,12 @@ class MainTemplate implements Template<Model> {
 			
 			int main(void) {
 				«FOR inst : instances»
-					«it.generate((inst.classifiers.head as Class).classifierBehavior, "name")»(&«it.generate(inst, "name")»);
+					«val cls = inst.classifiers.head as Class»
+					«val behavior = cls.classifierBehavior»
+					«val operation = behavior?.specification»
+					«val funcName = if (operation !== null) it.generate(operation, "name") else it.generate(behavior, "name")»
+					«funcName»(&«it.generate(inst, "name")»);
 				«ENDFOR»
-				
 				return 0;
 			}
 		'''
